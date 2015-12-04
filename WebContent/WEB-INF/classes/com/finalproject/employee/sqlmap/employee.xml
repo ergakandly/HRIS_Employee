@@ -1,0 +1,202 @@
+<!DOCTYPE sqlMap
+PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="employee">
+	<select id="getEmployee" resultClass="model.EmployeeBean" parameterClass="java.util.Map">
+		SELECT 
+		employee_id AS employeeId, 
+		employee_name AS employeeName, 
+		department_name AS departmentName, 
+		job_title AS jobTitle, 
+		manager AS manager, 
+		to_char(hire_date,'yyyy/mm/dd') AS hireDate
+		FROM
+		(
+		    SELECT 
+		    rownum as num,
+		    employee_id,
+		    employee_name, department_name, 
+		    job_title, manager,
+		    hire_date
+		    FROM 
+		    (
+		        SELECT 
+		        e.employee_id,
+		        e.first_name||' '||e.last_name AS employee_name, d.department_name, 
+		        j.job_title, (select first_name||' '||last_name from employees where employee_id = (select manager_id from employees where employee_id=e.employee_id)) AS manager,
+		        e.hire_date
+		        FROM 
+		        employees e JOIN departments d ON e.department_id = d.department_id JOIN jobs j ON  e.job_id = j.job_id
+		        LEFT JOIN employees m ON e.manager_id = m.employee_id
+		        ORDER BY employee_name
+		    )
+		)
+		WHERE 
+		num &gt;= #minimal# AND num &lt;= #maximal#
+	</select>
+	
+	<delete id="deleteEmployee" parameterClass="java.lang.String">
+		DELETE FROM
+		employees
+		WHERE
+		employee_id = #empId#
+	</delete>
+	
+	<insert id="insertEmployee" parameterClass="java.util.HashMap">
+		INSERT INTO 
+		employees 
+		VALUES((SELECT MAX(employee_id)+1 FROM employees),#firstName#,#lastName#,#email#,#phoneNumber#,to_date(#date#,'yyyy/mm/dd'),#jobId#,'','',#managerId#,#departmentId#)
+	</insert>
+	
+	<select id="getOneEmp" resultClass="model.EmployeeBean" parameterClass="java.lang.String">
+		SELECT
+		employee_id AS employeeId,
+		first_name AS firstName,
+		last_name AS lastName,
+		phone_number AS phoneNumber,
+		email AS email,
+		department_id AS departmentId, 
+		job_id AS jobId, 
+		manager_id AS managerId, 
+		to_char(hire_date,'yyyy/mm/dd') AS hireDate
+		FROM
+		employees
+		WHERE employee_id = #empId#
+	</select>
+	
+	<update id="updateEmployee" parameterClass="java.util.HashMap">
+		UPDATE
+		employees
+		SET
+		first_name = #firstName#,
+		last_name = #lastName#,
+		email = #email#,
+		phone_number = #phoneNumber#,
+		hire_date = to_date(#date#,'yyyy/mm/dd'),
+		job_id = #jobId#,
+		manager_id = #managerId#,
+		department_id = #departmentId#
+		WHERE
+		employee_id = #empId#
+	</update>
+	
+	<select id="getSearchedEmp" parameterClass="java.util.HashMap" resultClass="model.EmployeeBean">
+		SELECT 
+		employee_id AS employeeId, 
+		employee_name AS employeeName, 
+		department_name AS departmentName, 
+		job_title AS jobTitle, 
+		manager AS manager, 
+		to_char(hire_date,'yyyy/mm/dd') AS hireDate
+		FROM
+		(
+		    SELECT 
+		    rownum as num,
+		    employee_id,
+		    employee_name, department_name, 
+		    job_title, manager,
+		    hire_date
+		    FROM 
+		    (
+		        SELECT 
+		        e.employee_id,
+		        e.first_name||' '||e.last_name AS employee_name, d.department_name, 
+		        j.job_title, (select first_name||' '||last_name from employees where employee_id = (select manager_id from employees where employee_id=e.employee_id)) AS manager,
+		        e.hire_date
+		        FROM 
+		        employees e JOIN departments d ON e.department_id = d.department_id JOIN jobs j ON  e.job_id = j.job_id
+		        LEFT JOIN employees m ON e.manager_id = m.employee_id
+		        WHERE 1=1
+				<dynamic prepend="AND">
+					<isEqual property="searchBy" compareValue="1">
+						lower(e.first_name) LIKE lower('%' || #searchVal# || '%')
+					</isEqual>
+				</dynamic>
+				<dynamic prepend="AND">
+					<isEqual property="searchBy" compareValue="2">
+						lower(e.last_name) LIKE lower('%' || #searchVal# || '%')
+					</isEqual>
+				</dynamic>
+				<dynamic prepend="AND">
+					<isEqual property="searchBy" compareValue="3">
+						e.manager_id = #searchVal#
+					</isEqual>
+				</dynamic>
+				<dynamic prepend="AND">
+					<isEqual property="searchByDept" compareValue="2">
+						e.department_id = (select department_id from departments where department_name = 'Finance')
+					</isEqual>
+				</dynamic>
+				<dynamic prepend="AND">
+					<isEqual property="searchByDept" compareValue="3">
+						e.department_id = (select department_id from departments where department_name = 'Purchasing')
+					</isEqual>
+				</dynamic>
+				<dynamic prepend="AND">
+					<isEqual property="searchByDept" compareValue="4">
+						e.department_id = (select department_id from departments where department_name = 'Sales')
+					</isEqual>
+				</dynamic>
+				<dynamic prepend="AND">
+					<isEqual property="searchByDept" compareValue="5">
+						e.department_id = (select department_id from departments where department_name = 'Shipping')
+					</isEqual>
+				</dynamic>
+				ORDER BY employee_name
+		    )
+		)
+		WHERE 
+		num &gt;= #minimal# AND num &lt;= #maximal#
+	</select>
+	
+	<select id="getRow" resultClass="java.lang.String">
+		SELECT
+		count(employee_id)
+		FROM
+		employees
+	</select>
+	
+	<select id="getSearchedRow" parameterClass="java.util.HashMap" resultClass="java.lang.String">
+		SELECT
+		count(employee_id)
+		FROM
+		employees e
+		WHERE 1=1
+		<dynamic prepend="AND">
+			<isEqual property="searchBy" compareValue="1">
+				lower(e.first_name) LIKE lower('%' || #searchVal# || '%')
+			</isEqual>
+		</dynamic>
+		<dynamic prepend="AND">
+			<isEqual property="searchBy" compareValue="2">
+				lower(e.last_name) LIKE lower('%' || #searchVal# || '%')
+			</isEqual>
+		</dynamic>
+		<dynamic prepend="AND">
+			<isEqual property="searchBy" compareValue="3">
+				e.manager_id = #searchVal#
+			</isEqual>
+		</dynamic>
+		<dynamic prepend="AND">
+			<isEqual property="searchByDept" compareValue="2">
+				e.department_id = (select department_id from departments where department_name = 'Finance')
+			</isEqual>
+		</dynamic>
+		<dynamic prepend="AND">
+			<isEqual property="searchByDept" compareValue="3">
+				e.department_id = (select department_id from departments where department_name = 'Purchasing')
+			</isEqual>
+		</dynamic>
+		<dynamic prepend="AND">
+			<isEqual property="searchByDept" compareValue="4">
+				e.department_id = (select department_id from departments where department_name = 'Sales')
+			</isEqual>
+		</dynamic>
+		<dynamic prepend="AND">
+			<isEqual property="searchByDept" compareValue="5">
+				e.department_id = (select department_id from departments where department_name = 'Shipping')
+			</isEqual>
+		</dynamic>
+	</select>
+</sqlMap>

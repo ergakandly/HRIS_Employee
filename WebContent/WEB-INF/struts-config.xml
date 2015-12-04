@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE struts-config PUBLIC
+       "-//Apache Software Foundation//DTD Struts Configuration 1.2//EN"
+       "http://struts.apache.org/dtds/struts-config_1_2.dtd">
+       
+<struts-config>
+	<form-beans>
+		<form-bean name="empForm" type="com.hris.employee.form.EmployeeForm"/>
+	</form-beans>
+	
+	<action-mappings>
+		<action path="/index" type="com.hris.employee.handler.EmployeeAction" name="empForm" scope="request">
+			<forward name="success" path="/WEB-INF/jsp/ListEmployee.jsp" />
+			<forward name="add" path="/WEB-INF/jsp/AddEmployee.jsp" />
+			<forward name="edit" path="/WEB-INF/jsp/EditEmployee.jsp" />
+			<forward name="view" path="/WEB-INF/jsp/ViewEmployee.jsp" />
+			<forward name="mutate" path="/WEB-INF/jsp/MutateEmployee.jsp" />
+			<forward name="browse" path="/WEB-INF/jsp/ListEmployeeName.jsp" />
+			<forward name="select" path="/WEB-INF/jsp/MutateEmployee.jsp" />
+		</action>
+	</action-mappings>
+	
+	<message-resources parameter="ApplicationResources"/>
+	
+<!-- 	<plug-in className="org.apache.struts.validator.ValidatorPlugIn"> -->
+<!-- 	   <set-property property="pathnames"  -->
+<!-- 	   value="/WEB-INF/validator-rules.xml, /WEB-INF/validator-user.xml"/> -->
+<!-- 	</plug-in> -->
+
+</struts-config>

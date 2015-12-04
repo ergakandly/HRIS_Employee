@@ -1,0 +1,527 @@
+<!DOCTYPE sqlMap
+PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="employee">
+	<select id="getEmployee" resultClass="com.hris.employee.model.EmployeeBean" parameterClass="java.util.Map">
+		SELECT
+			emp.employee_id 	AS employeeId, 
+			emp.employee_name 	AS employeeName, 
+			dept.department 	AS department, 
+			loc.location 		AS location,
+			emp.nik             AS nik,
+			emp.description		AS description,
+			round(DBMS_LOB.getlength(employee_photo)/1024)		AS imageLength,
+			emp.status			AS status,
+			emp.hire_date		AS hireDate
+		FROM
+			ms_employee emp, ms_department dept, ms_location loc
+		WHERE
+			emp.department_id = dept.department_id and emp.location_id = loc.location_id
+		<dynamic prepend="AND">
+			<isEqual property="flag" compareValue="1">
+				status = '1'
+			</isEqual>
+		</dynamic>
+		ORDER BY
+			employee_name
+	</select>
+	
+	<select id="getOneEmployee" resultClass="com.hris.employee.model.EmployeeBean" parameterClass="java.lang.String">
+		SELECT 
+			sub.city_id												AS cityId,
+			city.city                                               AS city,
+			prov.province_id										AS provinceId,
+			CASE sub.highest_education  WHEN '1' THEN 'SD'
+                                        WHEN '2' THEN 'SMP'
+                                        WHEN '3' THEN 'SMA/SMK'
+                                        WHEN '4' THEN 'D1'
+                                        WHEN '5' THEN 'D2'
+                                        WHEN '6' THEN 'D3'
+                                        WHEN '7' THEN 'S1'
+                                        WHEN '8' THEN 'S2'
+                                        WHEN '9' THEN 'S3'
+            END                                                     AS highestEducation,
+            sub.highest_education                                   AS highestEducationId,
+			sub.major_id											AS majorId,
+			major.major                                             AS major,
+			CASE sub.religion   WHEN '1' THEN 'Islam'
+                                WHEN '2' THEN 'Katolik'
+                                WHEN '3' THEN 'Kristen'
+                                WHEN '4' THEN 'Budha'
+                                WHEN '5' THEN 'Hindu'
+                                WHEN '6' THEN 'Kong Hu Cu'
+                                WHEN '7' THEN 'Lain-lain'                                
+            END                                                     AS religion,
+            sub.religion                                            AS religionId,
+			CASE sub.tax_position   WHEN '1' THEN 'TK0'
+                                    WHEN '2' THEN 'TK1'
+                                    WHEN '3' THEN 'TK2'
+                                    WHEN '4' THEN 'K0'
+                                    WHEN '5' THEN 'K1'
+                                    WHEN '6' THEN 'K2'
+                                    WHEN '7' THEN 'K3'
+            END                                                     AS taxPosition,
+            sub.tax_position                                        AS taxPositionId,
+            sub.position_id                                         AS positionId,
+            pos.position                                            AS position,
+            sub.department_id										AS departmentId,
+            dept.department 									    AS department, 
+            sub.location_id											AS locationId,
+			loc.location                                            AS location,
+			bank.bank                                               AS bank,
+			CASE sub.employee_type  WHEN '1' THEN 'Pegawai Tetap'
+                                    WHEN '2' THEN 'Pegawai Tidak Tetap'
+            END                                                     AS employeeType,
+            sub.employee_type                                       AS employeeTypeId,
+            CASE sub.gender WHEN 'L' THEN 'Laki-laki'
+                            WHEN 'P' THEN 'Perempuan'
+            END                                                     AS gender,
+            sub.gender                                              AS genderId,
+            CASE sub.marital_status WHEN '1' THEN 'Belum Kawin'
+                                    WHEN '2' THEN 'Kawin'
+                                    WHEN '3' THEN 'Cerai'
+            END                                                     AS maritalStatus,
+            sub.marital_status                                      AS maritalStatusId,
+            CASE sub.status WHEN '1' THEN 'Aktif'
+                            WHEN '2' THEN 'Non-aktif'
+            END                                                     AS status,
+            sub.status                                              AS statusId,
+            head.employee_id										AS managerId,
+			head.employee_name 										AS managerName,
+			sub.employee_name 										AS employeeName,
+			sub.place_of_birth 										AS placeOfBirth, 
+			TO_CHAR(sub.date_of_birth, 'dd/mm/yyyy') 				AS dateOfBirth, 
+			sub.npwp 												AS npwp, 
+			sub.address 										    AS address, 
+			sub.phone_number 										AS phoneNumber,
+			sub.mobile_number 										AS mobileNumber, 
+			sub.email 												AS email,
+			sub.id_card 											AS idCard, 
+			sub.account_number 										AS accountNumber, 
+			sub.account_name 										AS accountName,
+			TO_CHAR(sub.hire_date, 'dd/mm/yyyy') 					AS hireDate, 
+			TO_CHAR(sub.end_contract_date, 'dd/mm/yyyy') 			AS endContractDate,
+			TO_CHAR(sub.quit_date, 'dd/mm/yyyy') 					AS quitDate, 
+			TO_CHAR(sub.income_period_start, 'dd/mm/yyyy') 			AS incomePeriodStart,
+			TO_CHAR(sub.income_period_end, 'dd/mm/yyyy') 			AS incomePeriodEnd, 
+			sub.nationality											AS nationality,
+			sub.amenability 										AS amenability, 
+			sub.current_leave_quota 								AS currentLeaveQuota, 
+			sub.last_leave_quota 									AS lastLeaveQuota, 
+			sub.reward_leave_quota 								    AS rewardLeaveQuota,
+			TO_CHAR(sub.renewal_date, 'dd/mm/yyyy') 				AS renewalDate,
+ 			TO_CHAR(sub.expired_date, 'dd/mm/yyyy') 				AS expiredDate, 
+			sub.description 									    AS description, 
+			sub.nik 												AS nik,
+			round(DBMS_LOB.getlength(sub.employee_photo)/1024) 		AS imageLength,
+			us.username                                             AS username
+		FROM
+			ms_employee sub
+		LEFT JOIN
+			ms_city city
+		ON
+			sub.city_id = city.city_id
+		LEFT JOIN
+			ms_major major
+		ON
+			sub.major_id = major.major_id
+		LEFT JOIN
+			ms_position pos
+		ON
+			sub.position_id = pos.position_id
+		LEFT JOIN
+			ms_department dept
+		ON
+			sub.department_id = dept.department_id
+		LEFT JOIN
+			ms_location loc
+		ON
+			sub.location_id = loc.location_id
+		LEFT JOIN
+			ms_bank bank 
+		ON
+			sub.bank_id = bank.bank_id
+		LEFT JOIN
+			ms_user us
+		ON
+			sub.employee_id = us.employee_id
+		LEFT JOIN
+			ms_province	prov
+		ON
+			prov.province_id = city.province_id
+		LEFT JOIN
+			ms_employee head 
+		ON
+			sub.manager_id = head.employee_id
+		WHERE sub.employee_id = #empId#
+	</select>
+	
+	<update id="deactivateEmployee" parameterClass="java.util.Map"> 
+		UPDATE
+			ms_employee
+		SET
+			status = '2',
+			quit_date = to_date(#quitDate#,'dd/mm/yyyy'),
+			description = #description#
+		WHERE
+			employee_id = #empId#
+	</update>
+	
+	<select id="getEmployeeName" resultClass="com.hris.employee.model.EmployeeBean">
+		SELECT 
+			employee_id AS employeeId, 
+			employee_name AS employeeName
+		FROM 
+			ms_employee
+		ORDER BY
+			employee_name
+	</select>
+	
+	<select id="getOneEmployeeName" parameterClass="java.lang.String" resultClass="com.hris.employee.model.EmployeeBean">
+		SELECT 
+			employee_id AS employeeId, 
+			employee_name AS employeeName,
+			department AS department
+		FROM 
+			ms_employee emp, ms_department dept
+		WHERE
+			emp.department_id = dept.department_id 
+		AND
+			employee_id = #empId#
+		ORDER BY 
+			employee_name
+	</select>
+	
+	<insert id="insertEmployee" parameterClass="com.hris.employee.model.EmployeeBean">
+		INSERT INTO ms_employee (
+			employee_id,
+			employee_name,
+			place_of_birth,
+			date_of_birth,
+			NPWP,
+			address,
+			city_id,
+			phone_number,
+			mobile_number,
+			email,
+			ID_card,
+			highest_education,
+			major_id,
+			religion,
+			tax_position,
+			position_id,
+			department_id,
+			location_id,
+			bank_id,
+			account_number,
+			account_name,
+			hire_date,
+			end_contract_date,
+			income_period_start,
+			income_period_end,
+			employee_type,
+			gender,
+			nationality,
+			marital_status,
+			amenability,
+			employee_photo,
+			renewal_date,
+			description,
+			manager_id,
+			NIK,
+			created_by,
+			create_date
+		) VALUES (
+			MS_EMPLOYEE_SEQ.NEXTVAL,
+			#employeeName#,
+			#placeOfBirth#,
+			to_date(#dateOfBirth#,'dd/mm/yyyy'), 
+			#npwp#, 
+			#address#, 
+			#cityId#, 
+			#phoneNumber#, 
+			#mobileNumber#,
+			#email#,
+			#idCard#, 
+			#highestEducation#, 
+			#majorId#,
+			#religion#, 
+			#taxPosition#,
+			#positionId#, 
+			#departmentId#, 
+			#locationId#,
+			#bankId#, 
+			#accountNumber#, 
+			#accountName#,
+			to_date(#hireDate#,'dd/mm/yyyy'), 
+			to_date(#endContractDate#,'dd/mm/yyyy'),
+			to_date(#incomePeriodStart#,'dd/mm/yyyy'),
+			to_date(#incomePeriodEnd#,'dd/mm/yyyy'),
+			#employeeType#, 
+			#gender#, 
+			#nationality#, 
+			#maritalStatus#, 
+			#amenability#, 
+			#photoFileData#,
+			add_months(to_date(#hireDate#,'dd/mm/yyyy'), 12),
+			#description#,
+			#managerId#, 
+			#nik#,
+			#userId#,
+			SYSDATE
+		)
+	</insert>
+	
+	<!-- user photo -->
+	<resultMap class="com.hris.employee.model.EmployeeBean" id="result">
+		<result property="employeeImage" column="employeeImage" jdbcType="BLOB"/>
+	</resultMap>
+	
+	<select id="getEmployeeImage" parameterClass="java.lang.String" resultMap="result">
+		SELECT
+			employee_photo AS employeeImage
+		FROM
+			ms_employee
+		WHERE
+			employee_id = #empId#
+	</select>
+	
+	<select id="getEmployeeImageSize" parameterClass="java.lang.String" resultClass="java.lang.String">
+		SELECT
+			round(DBMS_LOB.getlength(employee_photo)/1024) KB
+		FROM
+			ms_employee
+		WHERE
+			employee_id = #empId#
+	</select>
+	
+	<!-- diploma, certificate, personal documents -->
+	<resultMap class="com.hris.employee.model.EmployeeBean" id="resultDoc">
+		<result property="employeeDocuments" column="employeeDocuments" jdbcType="BLOB"/>
+	</resultMap>
+	
+	<select id="getEmployeeDocuments" parameterClass="java.lang.String" resultMap="resultDoc">
+		SELECT 
+			document 	AS employeeDocuments
+		FROM 
+			ms_document 
+		WHERE 
+			document_id = #docId#
+	</select>
+	
+	<select id="getEmployeeDocumentsId" parameterClass="java.util.Map" resultClass="com.hris.employee.model.DocBean">
+		SELECT
+			document_id AS documentId,
+			description AS description
+		FROM
+			ms_document
+		WHERE 
+			document_type = #docType# 
+		AND 
+			employee_id = #empId#
+	</select>
+			
+	<select id="getEmployeeDocumentsSize" parameterClass="java.util.Map" resultClass="java.lang.String">
+		SELECT
+			round(DBMS_LOB.getlength(document)/1024) KB
+		FROM
+			ms_document
+		WHERE
+			employee_id = #empId#
+		AND 
+			document_type = #docType#
+	</select>
+	
+	<insert id="insertDoc" parameterClass="java.util.Map">
+		INSERT INTO ms_document (
+			document_id,
+			employee_id, 
+			document,
+			document_type, 
+			description,
+			created_by,
+			create_date
+		) VALUES (
+			ms_document_seq.nextval, 
+			ms_employee_seq.currval, 
+			#employeeDoc#, 
+			#docType#, 
+			#docDesc#, 
+			#userId#, 
+			SYSDATE
+		)
+	</insert>
+	
+	<update id="mutateEmployeeDepartment" parameterClass="java.util.Map"> 
+		UPDATE
+			ms_employee
+		SET
+			department_id = #deptId#,
+			updated_by = #userId#,
+			update_date = SYSDATE
+		WHERE
+			employee_id = #empId#
+	</update>
+	
+	<update id="mutateEmployeeRole" parameterClass="java.util.Map"> 
+		UPDATE
+			ms_user
+		SET
+			role_id = #roleId#,
+			updated_by = #userId#,
+			update_date = SYSDATE
+		WHERE
+			employee_id = #empId#
+	</update>
+	
+	<select id="getOneEmployeeData" parameterClass="java.lang.String" resultClass="com.hris.employee.model.EmployeeBean">
+		SELECT 
+			employee_id								AS employeeId,
+			employee_name 							AS employeeName, 
+			to_char(date_of_birth, 'dd/mm/yyyy') 	AS dateOfBirth, 
+			department 								AS department
+		FROM
+			ms_employee emp, 
+			ms_department dept 
+		WHERE 
+			emp.department_id = dept.department_id 
+		AND 
+			employee_id = #empId#
+	</select>
+
+	<select id="getSameUsername" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		SELECT 
+			count(username) 
+		FROM 
+			ms_user 
+		WHERE 
+			username = #userName#
+			<dynamic prepend="AND">
+				<isNotEmpty property="empId">
+					employee_id != #empId#
+				</isNotEmpty>
+			</dynamic>
+			
+			
+	</select>
+	
+	<select id="getRoleName" resultClass="com.hris.employee.model.RoleBean" parameterClass="java.lang.String">
+		SELECT
+			role_id 	AS roleId,
+		    role_name 	AS roleName
+		FROM
+		    ms_role
+	</select>
+	
+	<select id="getDepartmentName" resultClass="java.lang.String" parameterClass="java.lang.String">
+		SELECT
+			department 		AS department
+		FROM
+			ms_department
+		WHERE 
+			department_id = #deptId#
+	</select>
+	
+	<update id="updateEmployee" parameterClass="com.hris.employee.model.EmployeeBean">
+		UPDATE 
+			ms_employee
+		SET
+			employee_name = 		#employeeName#,
+			place_of_birth = 		#placeOfBirth#,
+			date_of_birth = 		to_date(#dateOfBirth#,'dd/mm/yyyy'), 
+			NPWP = 					#npwp#, 
+			address = 				#address#, 
+			city_id = 				#cityId#, 
+			phone_number = 			#phoneNumber#, 
+			mobile_number = 		#mobileNumber#,
+			email = 				#email#,
+			ID_card = 				#idCard#, 
+			highest_education = 	#highestEducationId#, 
+			major_id = 				#majorId#,
+			religion = 				#religionId#, 
+			tax_position = 			#taxPositionId#,
+			position_id = 			#positionId#, 
+			location_id = 			#locationId#,
+			bank_id = 				#bankId#, 
+			account_number = 		#accountNumber#, 
+			account_name = 			#accountName#,
+			end_contract_date = 	to_date(#endContractDate#,'dd/mm/yyyy'),
+			income_period_start = 	to_date(#incomePeriodStart#,'dd/mm/yyyy'),
+			income_period_end = 	to_date(#incomePeriodEnd#,'dd/mm/yyyy'),
+			employee_type = 		#employeeTypeId#, 
+			gender = 				#genderId#, 
+			nationality = 			#nationality#, 
+			marital_status = 		#maritalStatusId#, 
+			amenability = 			#amenability#,
+		<isNotEmpty property="photoFileData">
+			employee_photo = 		#photoFileData#,
+		</isNotEmpty> 
+			description = 			#description#,
+			manager_id = 			#managerId#, 
+			nik =					#nik#,
+			updated_by = 			#userId#,
+			update_date = 			SYSDATE
+		WHERE
+			employee_id = 			#empId#
+	</update>
+	
+	<update id="updateUsername" parameterClass="java.util.Map">
+		UPDATE 
+			ms_user 
+		SET 
+			username = #username#,
+			updated_by = #userId#,
+			update_date = SYSDATE
+		WHERE 
+			employee_id = #empId#
+	</update>
+	
+	<update id="updateDocument" parameterClass="java.util.Map">
+		UPDATE 
+			ms_document
+		SET 
+			document = #doc#,
+			description = #desc#,
+			updated_by = #userId#,
+			update_date = SYSDATE
+		WHERE 
+			document_id = #docId#
+	</update>
+	
+	<select id="getPrivilege" parameterClass="java.lang.String" resultClass="java.lang.String">
+		SELECT 
+			priv.privilege_id
+		FROM 
+			ms_role role, 
+			ms_privilege priv, 
+			tr_role_privilege rolepriv, 
+			ms_user us
+		WHERE 
+			role.role_id = rolepriv.role_id 
+		AND 
+			priv.privilege_id = rolepriv.privilege_id 
+		AND 
+			role.role_id = us.role_id
+		AND 
+			username = #userName#
+	</select>
+	
+	<select id="getUrl" parameterClass="java.lang.String" resultClass="java.lang.String">
+		SELECT 
+			url_menu 
+		FROM 
+			ms_menu 
+		WHERE 
+			menu = #menu# 
+	</select>
+	
+	<select id="getSessionRole" parameterClass="java.lang.String" resultClass="java.lang.String">
+		SELECT 
+			CASE WHEN INSTR(role_name,'-')>0 THEN Substr (role_name, 1,instr(role_name,'-') - 1) ELSE role_name END rolename 
+		FROM 
+			ms_role
+		WHERE 
+			role_id = #roleId# 
+	</select>
+</sqlMap>

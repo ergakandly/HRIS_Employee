@@ -1,0 +1,90 @@
+<!DOCTYPE sqlMap
+PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="list">
+	<select id="getDepartment" resultClass="com.hris.employee.model.DepartmentBean">
+		SELECT
+			department_id 	AS departmentId,
+			department 		AS department
+		FROM
+			ms_department
+	</select>
+	
+	<select id="getMajor" resultClass="com.hris.employee.model.MajorBean">
+		SELECT
+			major_id 	AS majorId, 
+			major 		AS major
+		FROM 
+			ms_major
+	</select>
+	
+	<select id="getLocation" resultClass="com.hris.employee.model.LocationBean">
+		SELECT 
+			location_id AS locationId, 
+			location 	AS location
+		FROM
+			ms_location
+	</select>
+	
+	<select id="getPosition" resultClass="com.hris.employee.model.PositionBean">
+		SELECT 
+			position_id AS positionId, 
+			position 	AS position
+		FROM 
+			ms_position
+	</select>
+	
+	<select id="getCity" parameterClass="int" resultClass="com.hris.employee.model.CityBean">
+		SELECT 
+			city_id AS cityId, 
+			city 	AS city
+		FROM 
+			ms_city
+		WHERE
+			province_id = #provinceId#
+	</select>
+	
+	<select id="getProvince" resultClass="com.hris.employee.model.ProvinceBean">
+		SELECT 
+			province_id	AS provinceId, 
+			province	AS province
+		FROM 
+			ms_province
+	</select>
+	
+	<select id="getBank" resultClass="com.hris.employee.model.BankBean">
+		SELECT 
+			bank_id AS bankId, 
+			bank 	AS bank
+		FROM 
+			ms_bank
+	</select>
+	
+	<select id="getRole" parameterClass="java.util.Map" resultClass="com.hris.employee.model.RoleBean">
+		SELECT 
+			role_id 	AS roleId, 
+			role_name 	AS roleName
+		FROM 
+			ms_role
+		WHERE
+			1 = 1
+			<dynamic prepend="AND">
+				<isNotEmpty property="deptName">
+					<isEqual property="deptName" compareValue="HR">
+						lower(role_name) LIKE lower('%'||#deptName#||'%')
+					</isEqual>
+					<isEqual property="deptName" compareValue="Finance"> 
+						lower(role_name) LIKE lower('%'||#deptName#||'%')
+					</isEqual>
+					<isNotEqual property="deptName" compareValue="HR">
+						<isNotEqual property="deptName" compareValue="Finance">
+							lower(role_name) NOT LIKE lower('%HR%')
+							AND
+							lower(role_name) NOT LIKE lower('%Finance%')
+						</isNotEqual>
+					</isNotEqual>
+				</isNotEmpty>
+			</dynamic>
+	</select>
+</sqlMap>
