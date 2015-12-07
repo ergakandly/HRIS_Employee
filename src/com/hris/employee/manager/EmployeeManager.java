@@ -369,7 +369,7 @@ public class EmployeeManager {
 		return result;
 	}
 	
-	public void insertEmployeeData(EmployeeBean bean, String userId) {
+	public void insertEmployeeData(EmployeeBean bean, String userId, int flag) {
 		
 		try{
 			ibatis.startTransaction();
@@ -383,6 +383,44 @@ public class EmployeeManager {
 						parameter.put("employeeDoc", bean.getEmployeeDoc()[i].getFileData());
 						parameter.put("docDesc", bean.getDocDesc()[i]);
 						parameter.put("userId", userId);
+						parameter.put("flag", flag);
+						ibatis.insert("employee.insertDoc", parameter);
+						System.out.println(parameter.get("docType") +" = "+parameter.get("employeeDoc")+ " = "+ parameter.get("docDesc"));
+					}
+				}
+			}
+			
+			ibatis.commitTransaction();
+		} catch (SQLException e){
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				ibatis.endTransaction();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void insertMoreDocs(EmployeeBean bean, String empId, int flag) {
+		
+		try{
+			ibatis.startTransaction();
+			
+			for(int i=0;i<10;i++){
+				if(bean.getEmployeeDoc()[i]!=null){
+					if(bean.getEmployeeDoc()[i].getContentType().contains("image")){
+						Map parameter = new HashMap();
+						parameter.put("docType", bean.getDocType()[i]);
+						parameter.put("employeeDoc", bean.getEmployeeDoc()[i].getFileData());
+						parameter.put("docDesc", bean.getDocDesc()[i]);
+						parameter.put("userId", bean.getUserId());
+						parameter.put("empId", empId);
+						parameter.put("flag", flag);
 						ibatis.insert("employee.insertDoc", parameter);
 						System.out.println(parameter.get("docType") +" = "+parameter.get("employeeDoc")+ " = "+ parameter.get("docDesc"));
 					}

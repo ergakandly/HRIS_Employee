@@ -50,11 +50,11 @@
 			<% if(priviList.contains("1")) { %>
 				<logic:equal name="empForm" property="sidebar" value="1">
 					<li class="active"><a
-						href="javascript:flyToPage('backToList','','1','1')"><i
+						href="javascript:flyToPage('backToList','','1')"><i
 							class="fa fa-list"></i> Employee List</a></li>
 				</logic:equal>
 				<logic:notEqual name="empForm" property="sidebar" value="1">
-					<li><a href="javascript:flyToPage('backToList','','1','1')"><i
+					<li><a href="javascript:flyToPage('backToList','','1')"><i
 							class="fa fa-list"></i> Employee List</a></li>
 				</logic:notEqual>
 			<% } %>
@@ -63,11 +63,11 @@
 			<% if(priviList.contains("2")) { %>
 				<logic:equal name="empForm" property="sidebar" value="2">
 					<li class="active"><a
-						href="javascript:flyToPage('add','','1','2');"><i
+						href="javascript:flyToPage('add','','2');"><i
 							class="fa fa-plus"></i> Add New Employee</a></li>
 				</logic:equal>
 				<logic:notEqual name="empForm" property="sidebar" value="2">
-					<li><a href="javascript:flyToPage('add','','1','2');"><i
+					<li><a href="javascript:flyToPage('add','','2');"><i
 							class="fa fa-plus"></i> Add New Employee</a></li>
 				</logic:notEqual>
 			<% } %>
@@ -76,11 +76,11 @@
 			<% if(priviList.contains("3")) { %>
 			<logic:equal name="empForm" property="sidebar" value="3">
 				<li class="active"><a
-					href="javascript:flyToPage('mutate','','1','3');"><i
+					href="javascript:flyToPage('mutate','','3');"><i
 						class="fa fa-random"></i> Mutate Employee</a></li>
 			</logic:equal>
 			<logic:notEqual name="empForm" property="sidebar" value="3">
-				<li><a href="javascript:flyToPage('mutate','','1','3');"><i
+				<li><a href="javascript:flyToPage('mutate','','3');"><i
 						class="fa fa-random"></i> Mutate Employee</a></li>
 			</logic:notEqual>
 			<% } %>

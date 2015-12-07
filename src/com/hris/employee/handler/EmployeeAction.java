@@ -71,6 +71,7 @@ public class EmployeeAction extends Action{
 		
 		//String nameSession = "donny.setiawan";
 		String nameSession = session.getAttribute("username").toString();
+		System.out.println("Name "+nameSession);
 		
 		eForm.setUrlDashboard("http://192.168.10.29:8080"+manager.getUrl("Portal")+"?zx="+eForm.getParameter());
 		System.out.println(eForm.getUrlDashboard());
@@ -120,12 +121,33 @@ public class EmployeeAction extends Action{
 				}
 
 				eForm.getEmpBean().setUserId(session.getAttribute("userId").toString());
-				manager.insertEmployeeData(eForm.getEmpBean(), session.getAttribute("userId").toString());
+				manager.insertEmployeeData(eForm.getEmpBean(), session.getAttribute("userId").toString(), 0);
 				eForm.setListEmp(manager.getEmployee(0));
 				
 				eForm.setNotification("Employee has been succesfully added.");
 				eForm.setEmpBean(new EmployeeBean()); //reset field
 				return mapping.findForward("success");
+			}
+			else if("insertDocuments".equalsIgnoreCase(eForm.getTask())){
+				System.out.println("employeeId "+eForm.getId());
+				eForm.getEmpBean().setUserId(session.getAttribute("userId").toString());
+				manager.insertMoreDocs(eForm.getEmpBean(), eForm.getId(), 1);
+				
+				//mapping ke view
+				List<DocBean> diplomaIdList = manager.getEmployeeDocumentsId(eForm.getId(), "1");
+				List<DocBean> certificateIdList = manager.getEmployeeDocumentsId(eForm.getId(), "2");
+				List<DocBean> personalIdList = manager.getEmployeeDocumentsId(eForm.getId(), "3");
+				
+				eForm.setEmpBean(manager.getOneEmployee(eForm.getId()));
+				request.setAttribute("empId", eForm.getId());
+				request.setAttribute("diplomaIdList", diplomaIdList);
+				request.setAttribute("certificateIdList", certificateIdList);
+				request.setAttribute("personalIdList", personalIdList);
+				
+				request.setAttribute("imageSize", manager.getEmployeeImageSize(eForm.getId()));
+				
+				eForm.setNotification("Employee data has been succesfully updated.");
+				return mapping.findForward("view");
 			}
 			else if("edit".equalsIgnoreCase(eForm.getTask())){
 				eForm.setListDept(manager.getDepartment());
@@ -197,10 +219,10 @@ public class EmployeeAction extends Action{
 				//reset
 				eForm.setId(""); eForm.setEmpBean(new EmployeeBean()); 
 			}
-			else if("select".equalsIgnoreCase(eForm.getTask())){
-				eForm.setListDept(manager.getDepartment());
-				return mapping.findForward("select");
-			}
+//			else if("select".equalsIgnoreCase(eForm.getTask())){
+//				eForm.setListDept(manager.getDepartment());
+//				return mapping.findForward("select");
+//			}
 			else if("loadCity".equalsIgnoreCase(eForm.getTask())) {
 				Gson gson = new Gson(); 
 				
@@ -250,8 +272,8 @@ public class EmployeeAction extends Action{
 			return mapping.findForward("success");
 		}
 		else {
-			String idSession = "2";
-//			String idSession = session.getAttribute("userId").toString();
+//			String idSession = "2";
+			String idSession = session.getAttribute("userId").toString();
 			
 			System.out.println("ID fix: "+idSession); 
 			

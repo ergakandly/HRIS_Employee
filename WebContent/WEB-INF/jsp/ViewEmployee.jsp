@@ -108,7 +108,7 @@ img {
 <body>
 	<html:form action="/index">
 		<html:hidden name="empForm" property="task" value="insertDocuments" />
-		<html:hidden name="empForm" property="id" />
+		<html:hidden name="empForm" property="id"/>
 		<html:hidden name="empForm" property="sidebar" />
 		<div id="wrapper">
 			<%@include file="PartNavbar.jsp"%>

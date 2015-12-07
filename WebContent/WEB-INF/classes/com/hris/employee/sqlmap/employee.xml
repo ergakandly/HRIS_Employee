@@ -4,42 +4,27 @@ PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
 
 <sqlMap namespace="employee">
 	<select id="getEmployee" resultClass="com.hris.employee.model.EmployeeBean" parameterClass="java.util.Map">
-		SELECT 
-			rnum,
-			employeeId,
-			employeeName,
-			department,
-			location,
-			nik,
-			description,
-			imageLength,
-			status,
-			hireDate
+		SELECT
+			emp.employee_id 	AS employeeId, 
+			emp.employee_name 	AS employeeName, 
+			dept.department 	AS department, 
+			loc.location 		AS location,
+			emp.nik             AS nik,
+			emp.description		AS description,
+			round(DBMS_LOB.getlength(employee_photo)/1024)		AS imageLength,
+			emp.status			AS status,
+			emp.hire_date		AS hireDate
 		FROM
-			(SELECT
-				rownum rnum, a.*
-			FROM
-				(SELECT
-					emp.employee_id 	AS employeeId, 
-					emp.employee_name 	AS employeeName, 
-					dept.department 	AS department, 
-					loc.location 		AS location,
-					emp.nik             AS nik,
-					emp.description		AS description,
-					round(DBMS_LOB.getlength(employee_photo)/1024)		AS imageLength,
-					emp.status			AS status,
-					emp.hire_date		AS hireDate
-				FROM
-					ms_employee emp, ms_department dept, ms_location loc
-				WHERE
-					emp.department_id = dept.department_id and emp.location_id = loc.location_id
-				ORDER BY
-					employee_name
-				) a
-			WHERE
-				rownum &lt;= #maximal#)
+			ms_employee emp, ms_department dept, ms_location loc
 		WHERE
-			rnum &gt;= #minimal#
+			emp.department_id = dept.department_id and emp.location_id = loc.location_id
+		<dynamic prepend="AND">
+			<isEqual property="flag" compareValue="1">
+				status = '1'
+			</isEqual>
+		</dynamic>
+		ORDER BY
+			employee_name
 	</select>
 	
 	<select id="getOneEmployee" resultClass="com.hris.employee.model.EmployeeBean" parameterClass="java.lang.String">
@@ -172,13 +157,6 @@ PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
 		WHERE sub.employee_id = #empId#
 	</select>
 	
-	<select id="getRow" resultClass="java.lang.String">
-		SELECT
-			count(employee_id)
-		FROM
-			ms_employee
-	</select>
-
 	<update id="deactivateEmployee" parameterClass="java.util.Map"> 
 		UPDATE
 			ms_employee
@@ -366,7 +344,12 @@ PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
 			create_date
 		) VALUES (
 			ms_document_seq.nextval, 
-			ms_employee_seq.currval, 
+			<isEqual property="flag" compareValue="0">
+				ms_employee_seq.currval, 
+			</isEqual>
+			<isEqual property="flag" compareValue="1">
+				#empId#,
+			</isEqual>
 			#employeeDoc#, 
 			#docType#, 
 			#docDesc#, 
@@ -419,29 +402,14 @@ PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
 			ms_user 
 		WHERE 
 			username = #userName#
-		AND 
-			employee_id != #empId#
+			<dynamic prepend="AND">
+				<isNotEmpty property="empId">
+					employee_id != #empId#
+				</isNotEmpty>
+			</dynamic>
+			
+			
 	</select>
-	
-	<insert id="insertUser" parameterClass="java.util.Map">
-		INSERT INTO ms_user ( 
-			user_id, 
-			username, 
-			password, 
-			employee_id, 
-			role_id, 
-			created_by, 
-			create_date
-		) VALUES (
-			ms_user_seq.nextval, 
-			#username#,
-			GET_HASH(#password#),
-			ms_employee_seq.currval, 
-			#roleId#, 
-			#userId#, 
-			SYSDATE
-		)
-	</insert>
 	
 	<select id="getRoleName" resultClass="com.hris.employee.model.RoleBean" parameterClass="java.lang.String">
 		SELECT

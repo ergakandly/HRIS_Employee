@@ -344,7 +344,12 @@ PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
 			create_date
 		) VALUES (
 			ms_document_seq.nextval, 
-			ms_employee_seq.currval, 
+			<isEqual property="flag" compareValue="0">
+				ms_employee_seq.currval, 
+			</isEqual>
+			<isEqual property="flag" compareValue="1">
+				#empId#,
+			</isEqual>
 			#employeeDoc#, 
 			#docType#, 
 			#docDesc#, 
