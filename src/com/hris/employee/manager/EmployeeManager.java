@@ -467,11 +467,19 @@ public class EmployeeManager {
 	}
 
 	public void insertMoreDocs(EmployeeBean bean, String empId, int flag) throws SQLException, FileNotFoundException, IOException {
-		
+		String docContentType="";
 		try{
 			ibatis.startTransaction();
 			
 			for(int i=0;i<10;i++){
+				if(bean.getEmployeeDoc()[i].getContentType().contains("image")) {
+					docContentType = "1"; 
+				} else if(bean.getEmployeeDoc()[i].getContentType().contains("officedocument")) {
+					docContentType = "2"; 
+				} else if(bean.getEmployeeDoc()[i].getContentType().contains("pdf")) {
+					docContentType = "3"; 
+				} 
+				
 				if(bean.getEmployeeDoc()[i]!=null){
 					if(bean.getEmployeeDoc()[i].getContentType().contains("image") || bean.getEmployeeDoc()[i].getContentType().contains("pdf") || 
 							   bean.getEmployeeDoc()[i].getContentType().contains("officedocument")){
@@ -482,6 +490,7 @@ public class EmployeeManager {
 						parameter.put("userId", bean.getUserId());
 						parameter.put("empId", empId);
 						parameter.put("flag", flag);
+						parameter.put("docContentType", docContentType);
 						ibatis.insert("employee.insertDoc", parameter);
 						System.out.println(parameter.get("docType") +" = "+parameter.get("employeeDoc")+ " = "+ parameter.get("docDesc"));
 					}
