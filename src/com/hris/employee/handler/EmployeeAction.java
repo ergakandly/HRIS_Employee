@@ -70,15 +70,15 @@ public class EmployeeAction extends Action{
 		eForm.setUrlPortal(manager.getPortalUrl());
 		request.setAttribute("zx", "?zx="+EmployeeUtil.createParameter(session));
 		
-		String role = "HR";  
-//		String role = manager.getSessionRole(session.getAttribute("roleId").toString()); 
+//		String role = "HR";  
+		String role = manager.getSessionRole(session.getAttribute("roleId").toString()); 
 		System.out.println("Role "+role);
 		
-		String nameSession = "isidorus.sn";
-//		String nameSession = session.getAttribute("username").toString();
+//		String nameSession = "isidorus.sn";
+		String nameSession = session.getAttribute("username").toString();
 		System.out.println("Name "+nameSession);
 		
-		List privList = manager.getPrivilege(nameSession); //ganti dengan username dari session
+		List privList = manager.getPrivilege(nameSession);
 		System.out.println("list:"+privList);
 		
 		request.setAttribute("privList", privList);
@@ -125,21 +125,25 @@ public class EmployeeAction extends Action{
 					eForm.getEmpBean().setPhotoFileData(eForm.getEmpBean().getEmployeePhoto().getFileData());
 				}
 
-//				eForm.getEmpBean().setUserId(session.getAttribute("userId").toString());
-				eForm.getEmpBean().setUserId("1");
-//				manager.insertEmployeeData(eForm.getEmpBean(), session.getAttribute("userId").toString(), 0);
+//				eForm.getEmpBean().setUserId("1");
+				eForm.getEmpBean().setUserId(session.getAttribute("userId").toString());
+				
 				try {
-					eForm.setNotification("Employee has been succesfully added.");
-					manager.insertEmployeeData(eForm.getEmpBean(), "1", 0);
-					System.out.println("ga masuk catch");
+//					manager.insertEmployeeData(eForm.getEmpBean(), "1", 0);
+					manager.insertEmployeeData(eForm.getEmpBean(), session.getAttribute("userId").toString(), 0);
+					eForm.setNotification("Employee data succesfully added.");
 				} catch (SQLException e) {
 					eForm.setNotification("Add employee failed. SQL error occurred. Please contact the administrator.");
+					e.printStackTrace();
 				} catch (FileNotFoundException e) {
 					eForm.setNotification("Add employee failed. File not found error occurred. Please check if the file has been uploaded successfully.");
+					e.printStackTrace();
 				} catch (IOException e) {
 					eForm.setNotification("Add employee failed. Input/Output error occurred. Please check if the file has been uploaded successfully.");
+					e.printStackTrace();
 				} catch (Exception ex) {
 					eForm.setNotification("Add employee failed. Unknown error occured.");
+					ex.printStackTrace();
 				}
 				
 				eForm.setListEmp(manager.getEmployee(0));
@@ -149,10 +153,25 @@ public class EmployeeAction extends Action{
 			}
 			else if("insertDocuments".equalsIgnoreCase(eForm.getTask())){
 				System.out.println("employeeId "+eForm.getId());
-//				eForm.getEmpBean().setUserId(session.getAttribute("userId").toString());
-				eForm.getEmpBean().setUserId("1");
-				manager.insertMoreDocs(eForm.getEmpBean(), eForm.getId(), 1);
-//				manager.insertMoreDocs1(eForm.getEmpBean(), eForm.getId(), 1);
+//				eForm.getEmpBean().setUserId("1");
+				eForm.getEmpBean().setUserId(session.getAttribute("userId").toString());
+				
+				try{
+					manager.insertMoreDocs(eForm.getEmpBean(), eForm.getId(), 1);
+					eForm.setNotification("Document(s) succesfully added.");
+				} catch (SQLException e) {
+					eForm.setNotification("Add document(s) failed. SQL error occurred. Please contact the administrator.");
+					e.printStackTrace();
+				} catch (FileNotFoundException e) {
+					eForm.setNotification("Add document(s) failed. File not found error occurred. Please check if the file has been uploaded successfully.");
+					e.printStackTrace();
+				} catch (IOException e) {
+					eForm.setNotification("Add document(s) failed. Input/Output error occurred. Please check if the file has been uploaded successfully.");
+					e.printStackTrace();
+				} catch (Exception ex) {
+					eForm.setNotification("Add document(s) failed. Unknown error occured.");
+					ex.printStackTrace();
+				}
 				
 				//mapping ke view
 				List<DocBean> diplomaIdList = manager.getEmployeeDocumentsId(eForm.getId(), "1");
@@ -167,7 +186,6 @@ public class EmployeeAction extends Action{
 				
 				request.setAttribute("imageSize", manager.getEmployeeImageSize(eForm.getId()));
 				
-				eForm.setNotification("Employee data has been succesfully updated.");
 				return mapping.findForward("view");
 			}
 			else if("edit".equalsIgnoreCase(eForm.getTask())){
@@ -198,9 +216,11 @@ public class EmployeeAction extends Action{
 					eForm.getEmpBean().setPhotoFileData(eForm.getEmpBean().getEmployeePhoto().getFileData());
 				} 
 				
-				eForm.getEmpBean().setEmpId(eForm.getId());
 //				eForm.getEmpBean().setUserId(session.getAttribute("userId").toString());
-				eForm.getEmpBean().setUserId("1");
+				eForm.getEmpBean().setEmpId(eForm.getId());
+				
+//				eForm.getEmpBean().setUserId("1");
+				eForm.getEmpBean().setUserId(session.getAttribute("userId").toString());
 				manager.updateEmployee(eForm.getEmpBean());
 
 				manager.updateDocument(eForm.getEmpBean());
@@ -223,7 +243,16 @@ public class EmployeeAction extends Action{
 				return mapping.findForward("view");
 			}
 			else if("deactivate".equalsIgnoreCase(eForm.getTask())){
-				manager.deactivate(eForm.getId(),eForm.getEmpBean().getDescription(),eForm.getEmpBean().getQuitDate());
+				try{
+					manager.deactivate(eForm.getId(),eForm.getEmpBean().getDescription(),eForm.getEmpBean().getQuitDate());
+					eForm.setNotification("Employee successfully deaactivated.");
+				} catch (SQLException e){
+					eForm.setNotification("Deactivation failed. SQL error occurred. Please contact the administrator.");
+					e.printStackTrace();
+				} catch (Exception ex){
+					eForm.setNotification("Deactivation failed. Unknown error occurred.");
+					ex.printStackTrace();
+				}
 				eForm.setEmpBean(new EmployeeBean()); 
 			}
 			else if("mutate".equalsIgnoreCase(eForm.getTask())){
@@ -236,16 +265,21 @@ public class EmployeeAction extends Action{
 			else if("updateMutation".equalsIgnoreCase(eForm.getTask())){
 				System.out.println(eForm.getEmpBean().getDepartmentId());
 				System.out.println(eForm.getEmpBean().getRoleId());
-//				manager.mutate(eForm.getId(), eForm.getEmpBean().getDepartmentId(), eForm.getEmpBean().getRoleId(),session.getAttribute("userId").toString());
-				manager.mutate(eForm.getId(), eForm.getEmpBean().getDepartmentId(), eForm.getEmpBean().getRoleId(),"1");
+				try{
+//					manager.mutate(eForm.getId(), eForm.getEmpBean().getDepartmentId(), eForm.getEmpBean().getRoleId(),"1");
+					manager.mutate(eForm.getId(), eForm.getEmpBean().getDepartmentId(), eForm.getEmpBean().getRoleId(),session.getAttribute("userId").toString());
+					eForm.setNotification("Employee successfully mutated.");
+				} catch (SQLException e){
+					eForm.setNotification("Mutation failed. SQL error occurred. Please contact the administrator.");
+					e.printStackTrace();
+				} catch (Exception ex){
+					eForm.setNotification("Mutation failed. Unknown error occured.");
+					ex.printStackTrace();
+				} 
 				
 				//reset
 				eForm.setId(""); eForm.setEmpBean(new EmployeeBean()); 
 			}
-//			else if("select".equalsIgnoreCase(eForm.getTask())){
-//				eForm.setListDept(manager.getDepartment());
-//				return mapping.findForward("select");
-//			}
 			else if("loadCity".equalsIgnoreCase(eForm.getTask())) {
 				Gson gson = new Gson(); 
 				
@@ -299,8 +333,8 @@ public class EmployeeAction extends Action{
 			return mapping.findForward("success");
 		}
 		else {
-			String idSession = "3";
-//			String idSession = session.getAttribute("userId").toString();
+//			String idSession = "3";
+			String idSession = session.getAttribute("userId").toString();
 			
 			System.out.println("ID fix: "+idSession); 
 			

@@ -161,7 +161,9 @@ PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
 		UPDATE
 			ms_employee
 		SET
-			status = '2',
+			<isEqual property="flag" compareValue="0">
+				status = '2',
+			</isEqual>
 			quit_date = to_date(#quitDate#,'dd/mm/yyyy'),
 			description = #description#
 		WHERE

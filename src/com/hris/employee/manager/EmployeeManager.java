@@ -3,6 +3,9 @@ package com.hris.employee.manager;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,20 +39,31 @@ public class EmployeeManager {
 		return list;
 	}
 	
-	public void deactivate(String empId, String statusDesc, String quitDate) {
+	public void deactivate(String empId, String statusDesc, String quitDate) throws SQLException {
+		String flag = "";
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyy");
+		Date today = new Date();
+		
+		try {
+			if(dateFormat.parse(quitDate).before(today) || dateFormat.parse(quitDate).equals(today)){
+				flag = "1";
+			} else {
+				flag = "0";
+			}
+		} catch (ParseException e1) {
+			e1.printStackTrace();
+		}
+		
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("description", statusDesc);
 		map.put("empId", empId);
 		map.put("quitDate", quitDate);
+		map.put("flag", flag);
 		
 		try{
 			ibatis.startTransaction();
 			ibatis.update("employee.deactivateEmployee", map);
 			ibatis.commitTransaction();
-		} catch (SQLException e){
-			e.printStackTrace();
-		} catch (Exception ex){
-			ex.printStackTrace();
 		} finally {
 			try {
 				ibatis.endTransaction();
@@ -59,7 +73,7 @@ public class EmployeeManager {
 		}
 	}
 	
-	public void mutate(String empId, String deptId, String roleId, String userId) {
+	public void mutate(String empId, String deptId, String roleId, String userId) throws SQLException {
 		Map<String, String> mapDept = new HashMap<String, String>();
 		mapDept.put("deptId", deptId);
 		mapDept.put("empId", empId);
@@ -75,10 +89,6 @@ public class EmployeeManager {
 			ibatis.update("employee.mutateEmployeeDepartment", mapDept);
 			ibatis.update("employee.mutateEmployeeRole", mapRole);
 			ibatis.commitTransaction();
-		} catch (SQLException e){
-			e.printStackTrace();
-		} catch (Exception ex){
-			ex.printStackTrace();
 		} finally {
 			try {
 				ibatis.endTransaction();
@@ -416,20 +426,30 @@ public class EmployeeManager {
 	}
 	
 	public void insertEmployeeData(EmployeeBean bean, String userId, int flag) throws SQLException, FileNotFoundException, IOException {
-		
+		String docContentType="";
 		try{
 			ibatis.startTransaction();
 			ibatis.insert("employee.insertEmployee", bean);
 			
-			for(int i=0;i<10;i++){
+			for(int i=0;i<10;i++){				
+				if(bean.getEmployeeDoc()[i].getContentType().contains("image")) {
+					docContentType = "1"; 
+				} else if(bean.getEmployeeDoc()[i].getContentType().contains("officedocument")) {
+					docContentType = "2"; 
+				} else if(bean.getEmployeeDoc()[i].getContentType().contains("pdf")) {
+					docContentType = "3"; 
+				} 
+				
 				if(bean.getEmployeeDoc()[i]!=null){
-					if(bean.getEmployeeDoc()[i].getContentType().contains("image")){
+					if(bean.getEmployeeDoc()[i].getContentType().contains("image") || bean.getEmployeeDoc()[i].getContentType().contains("pdf") || 
+					   bean.getEmployeeDoc()[i].getContentType().contains("officedocument")){
 						Map<String, Object> parameter = new HashMap<String, Object>();
 						parameter.put("docType", bean.getDocType()[i]);
 						parameter.put("employeeDoc", bean.getEmployeeDoc()[i].getFileData());
 						parameter.put("docDesc", bean.getDocDesc()[i]);
 						parameter.put("userId", userId);
 						parameter.put("flag", flag);
+						parameter.put("docContentType", docContentType);
 						ibatis.insert("employee.insertDoc", parameter);
 						System.out.println(parameter.get("docType") +" = "+parameter.get("employeeDoc")+ " = "+ parameter.get("docDesc"));
 					}
@@ -446,14 +466,15 @@ public class EmployeeManager {
 		}
 	}
 
-	public void insertMoreDocs(EmployeeBean bean, String empId, int flag) {
+	public void insertMoreDocs(EmployeeBean bean, String empId, int flag) throws SQLException, FileNotFoundException, IOException {
 		
 		try{
 			ibatis.startTransaction();
 			
 			for(int i=0;i<10;i++){
 				if(bean.getEmployeeDoc()[i]!=null){
-					if(bean.getEmployeeDoc()[i].getContentType().contains("image")){
+					if(bean.getEmployeeDoc()[i].getContentType().contains("image") || bean.getEmployeeDoc()[i].getContentType().contains("pdf") || 
+							   bean.getEmployeeDoc()[i].getContentType().contains("officedocument")){
 						Map<String, Object> parameter = new HashMap<String, Object>();
 						parameter.put("docType", bean.getDocType()[i]);
 						parameter.put("employeeDoc", bean.getEmployeeDoc()[i].getFileData());
@@ -468,14 +489,6 @@ public class EmployeeManager {
 			}
 			
 			ibatis.commitTransaction();
-		} catch (SQLException e){
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception ex) {
-			ex.printStackTrace();
 		} finally {
 			try {
 				ibatis.endTransaction();
