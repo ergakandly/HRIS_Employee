@@ -38,8 +38,7 @@ public class EmployeeForm extends ActionForm {
 	private String department;
 	
 	private String notification;
-	private String parameter;
-	private String urlDashboard;
+	private String urlPortal;
 	
 	public String getNotification() {
 		return notification;
@@ -47,17 +46,11 @@ public class EmployeeForm extends ActionForm {
 	public void setNotification(String notification) {
 		this.notification = notification;
 	}
-	public String getUrlDashboard() {
-		return urlDashboard;
+	public String getUrlPortal() {
+		return urlPortal;
 	}
-	public void setUrlDashboard(String urlDashboard) {
-		this.urlDashboard = urlDashboard;
-	}
-	public String getParameter() {
-		return parameter;
-	}
-	public void setParameter(String parameter) {
-		this.parameter = parameter;
+	public void setUrlPortal(String urlPortal) {
+		this.urlPortal = urlPortal;
 	}
 	public String getDepartment() {
 		return department;

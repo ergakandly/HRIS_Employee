@@ -90,9 +90,9 @@
 
 							<!-- BREADCRUMB -->
 							<ul class="breadcrumb">
-								<li><i class="fa fa-dashboard"></i> <a
-									href="<bean:write name="empForm" property="urlDashboard" />">
-										Dashboard</a></li>
+								<li><i class="fa fa-dashboard"></i>
+								<a href="<bean:write name="empForm" property="urlPortal"/><%= request.getAttribute("zx") %>">Dashboard</a>
+								</li>
 								<li><i class="fa fa-list"></i> Employee List</li>
 							</ul>
 							<!-- END BREADCRUMB -->

@@ -36,12 +36,11 @@ public class EmployeeAction extends Action{
 		String parameter = null;
 		
 		HttpSession session = request.getSession(false);
-		String param = null;
 		//check session jika ada parameter yang diterima
 		if (null!=request.getParameter("zx") && EmployeeUtil.isBase64(request.getParameter("zx").replace(' ', '+'))) {
 			//parameter diterima
 			System.out.println("EMPLOYEE Check session dari parameter.");
-			param = request.getParameter("zx").replace(' ', '+');
+			String param = request.getParameter("zx").replace(' ', '+');
 			String user[] = EmployeeUtil.decrypt(param).split("##");
 			
 			// cek apakah memang data memiliki hak akses
@@ -49,7 +48,6 @@ public class EmployeeAction extends Action{
 				//parameter yang akan dikirim
 			    System.out.println("EMPLOYEE param dikirim: "+ param);
 			    request.setAttribute("zx", param);
-			    parameter = param;
 			    
 				System.out.println("EMPLOYEE Set session "+user[0]+".");
 				session.setAttribute("username", user[0]);
@@ -64,9 +62,13 @@ public class EmployeeAction extends Action{
 		    	System.out.println("EMPLOYEE "+session.getAttribute("username")+" tidak terautorisasi. Session dihancurkan.");
 		    	if (null != session)
 		    		session.invalidate();
+		    	
+		    	response.sendRedirect(manager.getPortalUrl());
+				return null;
 			}	
 		}
-		eForm.setParameter(parameter);
+		eForm.setUrlPortal(manager.getPortalUrl());
+		request.setAttribute("zx", "?zx="+EmployeeUtil.createParameter(session));
 		
 		String role = "HR";  
 //		String role = manager.getSessionRole(session.getAttribute("roleId").toString()); 
@@ -75,9 +77,6 @@ public class EmployeeAction extends Action{
 		String nameSession = "isidorus.sn";
 //		String nameSession = session.getAttribute("username").toString();
 		System.out.println("Name "+nameSession);
-		
-		eForm.setUrlDashboard("http://192.168.10.29:8080"+manager.getUrl("Portal")+"?zx="+eForm.getParameter());
-		System.out.println(eForm.getUrlDashboard());
 		
 		List privList = manager.getPrivilege(nameSession); //ganti dengan username dari session
 		System.out.println("list:"+privList);
@@ -284,12 +283,16 @@ public class EmployeeAction extends Action{
 			    return null;
 			}
 			else if("logout".equalsIgnoreCase(eForm.getTask())) {
+				session = request.getSession(false);
 				manager.updateStatusLogin(session.getAttribute("username").toString(), 0);
 				System.out.println("EMPLOYEE "+session.getAttribute("username")+" logout.");
 				
 				if(session != null)
 		    		session.invalidate();
-				System.out.println("EMPLOYEE Kembali ke halaman login.");
+				
+				System.out.println("EMPLOYEE menuju PORTAL");
+				response.sendRedirect(manager.getPortalUrl());
+				return null;
 			}
 			eForm.setListEmp(manager.getEmployee(0));
 			
