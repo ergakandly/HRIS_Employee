@@ -78,11 +78,15 @@ public class EmployeeBean implements Serializable{
 	private Integer imageLength;
 	private String roleId;
 	
+	//insert new documents
 	private String[] docType = new String[10];
 	private FormFile[] employeeDoc = new FormFile[10];
 	private String[] docDesc = new String[10];
+//	private String docType;
+//	private FormFile employeeDoc;
+//	private String docDesc;
 	
-	/*private String documentId;*/
+	//show documents preview
 	private byte[] employeeDocuments;
 	private String[] docId = new String[10];
 	
@@ -95,66 +99,6 @@ public class EmployeeBean implements Serializable{
 	}
 	public void setUserId(String userId) {
 		this.userId = userId;
-	}
-	public int getCounterDoc() {
-		return counterDoc;
-	}
-	public void setCounterDoc(int counterDoc) {
-		this.counterDoc = counterDoc;
-	}
-	public String getGenderId() {
-		return genderId;
-	}
-	public String getEmpId() {
-		return empId;
-	}
-	public void setEmpId(String empId) {
-		this.empId = empId;
-	}
-	public void setGenderId(String genderId) {
-		this.genderId = genderId;
-	}
-	public String[] getDocId() {
-		return docId;
-	}
-	public void setDocId(String[] docId) {
-		this.docId = docId;
-	}
-	public String getHighestEducationId() {
-		return highestEducationId;
-	}
-	public void setHighestEducationId(String highestEducationId) {
-		this.highestEducationId = highestEducationId;
-	}
-	public String getReligionId() {
-		return religionId;
-	}
-	public void setReligionId(String religionId) {
-		this.religionId = religionId;
-	}
-	public String getMaritalStatusId() {
-		return maritalStatusId;
-	}
-	public void setMaritalStatusId(String maritalStatusId) {
-		this.maritalStatusId = maritalStatusId;
-	}
-	public String getEmployeeTypeId() {
-		return employeeTypeId;
-	}
-	public void setEmployeeTypeId(String employeeTypeId) {
-		this.employeeTypeId = employeeTypeId;
-	}
-	public String getStatusId() {
-		return statusId;
-	}
-	public void setStatusId(String statusId) {
-		this.statusId = statusId;
-	}
-	public String getTaxPositionId() {
-		return taxPositionId;
-	}
-	public void setTaxPositionId(String taxPositionId) {
-		this.taxPositionId = taxPositionId;
 	}
 	public String getRnum() {
 		return rnum;
@@ -197,6 +141,12 @@ public class EmployeeBean implements Serializable{
 	}
 	public void setGender(String gender) {
 		this.gender = gender;
+	}
+	public String getGenderId() {
+		return genderId;
+	}
+	public void setGenderId(String genderId) {
+		this.genderId = genderId;
 	}
 	public String getPlaceOfBirth() {
 		return placeOfBirth;
@@ -264,6 +214,12 @@ public class EmployeeBean implements Serializable{
 	public void setHighestEducation(String highestEducation) {
 		this.highestEducation = highestEducation;
 	}
+	public String getHighestEducationId() {
+		return highestEducationId;
+	}
+	public void setHighestEducationId(String highestEducationId) {
+		this.highestEducationId = highestEducationId;
+	}
 	public String getMajorId() {
 		return majorId;
 	}
@@ -281,6 +237,12 @@ public class EmployeeBean implements Serializable{
 	}
 	public void setReligion(String religion) {
 		this.religion = religion;
+	}
+	public String getReligionId() {
+		return religionId;
+	}
+	public void setReligionId(String religionId) {
+		this.religionId = religionId;
 	}
 	public String getNationality() {
 		return nationality;
@@ -311,6 +273,12 @@ public class EmployeeBean implements Serializable{
 	}
 	public void setMaritalStatus(String maritalStatus) {
 		this.maritalStatus = maritalStatus;
+	}
+	public String getMaritalStatusId() {
+		return maritalStatusId;
+	}
+	public void setMaritalStatusId(String maritalStatusId) {
+		this.maritalStatusId = maritalStatusId;
 	}
 	public String getAmenability() {
 		return amenability;
@@ -384,11 +352,23 @@ public class EmployeeBean implements Serializable{
 	public void setEmployeeType(String employeeType) {
 		this.employeeType = employeeType;
 	}
+	public String getEmployeeTypeId() {
+		return employeeTypeId;
+	}
+	public void setEmployeeTypeId(String employeeTypeId) {
+		this.employeeTypeId = employeeTypeId;
+	}
 	public String getStatus() {
 		return status;
 	}
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	public String getStatusId() {
+		return statusId;
+	}
+	public void setStatusId(String statusId) {
+		this.statusId = statusId;
 	}
 	public String getDescription() {
 		return description;
@@ -450,6 +430,12 @@ public class EmployeeBean implements Serializable{
 	public void setTaxPosition(String taxPosition) {
 		this.taxPosition = taxPosition;
 	}
+	public String getTaxPositionId() {
+		return taxPositionId;
+	}
+	public void setTaxPositionId(String taxPositionId) {
+		this.taxPositionId = taxPositionId;
+	}
 	public String getBankId() {
 		return bankId;
 	}
@@ -504,16 +490,47 @@ public class EmployeeBean implements Serializable{
 	public void setDocDesc(String[] docDesc) {
 		this.docDesc = docDesc;
 	}
-//	public String getDocumentId() {
-//		return documentId;
-//	}
-//	public void setDocumentId(String documentId) {
-//		this.documentId = documentId;
-//	}
+	
 	public byte[] getEmployeeDocuments() {
 		return employeeDocuments;
 	}
+//	public String getDocType() {
+//		return docType;
+//	}
+//	public void setDocType(String docType) {
+//		this.docType = docType;
+//	}
+//	public FormFile getEmployeeDoc() {
+//		return employeeDoc;
+//	}
+//	public void setEmployeeDoc(FormFile employeeDoc) {
+//		this.employeeDoc = employeeDoc;
+//	}
+//	public String getDocDesc() {
+//		return docDesc;
+//	}
+//	public void setDocDesc(String docDesc) {
+//		this.docDesc = docDesc;
+//	}
 	public void setEmployeeDocuments(byte[] employeeDocuments) {
 		this.employeeDocuments = employeeDocuments;
+	}
+	public String[] getDocId() {
+		return docId;
+	}
+	public void setDocId(String[] docId) {
+		this.docId = docId;
+	}
+	public String getEmpId() {
+		return empId;
+	}
+	public void setEmpId(String empId) {
+		this.empId = empId;
+	}
+	public int getCounterDoc() {
+		return counterDoc;
+	}
+	public void setCounterDoc(int counterDoc) {
+		this.counterDoc = counterDoc;
 	}
 }

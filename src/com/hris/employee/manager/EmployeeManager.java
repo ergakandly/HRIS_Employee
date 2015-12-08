@@ -29,7 +29,9 @@ public class EmployeeManager {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} 
 		
 		return list;
 	}
@@ -46,6 +48,8 @@ public class EmployeeManager {
 			ibatis.commitTransaction();
 		} catch (SQLException e){
 			e.printStackTrace();
+		} catch (Exception ex){
+			ex.printStackTrace();
 		} finally {
 			try {
 				ibatis.endTransaction();
@@ -73,6 +77,8 @@ public class EmployeeManager {
 			ibatis.commitTransaction();
 		} catch (SQLException e){
 			e.printStackTrace();
+		} catch (Exception ex){
+			ex.printStackTrace();
 		} finally {
 			try {
 				ibatis.endTransaction();
@@ -90,7 +96,9 @@ public class EmployeeManager {
 			eBean = (EmployeeBean) ibatis.queryForObject("employee.getOneEmployee", empId);
 		} catch (SQLException e){
 			e.printStackTrace();
-		}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} 
 		return eBean;
 	}
 	
@@ -100,7 +108,9 @@ public class EmployeeManager {
 			eBean = (EmployeeBean) ibatis.queryForObject("employee.getOneEmployeeName", empId);
 		} catch (SQLException e){
 			e.printStackTrace();
-		}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} 
 		return eBean;
 	}
 	
@@ -112,6 +122,8 @@ public class EmployeeManager {
 			ibatis.commitTransaction();
 		} catch (SQLException e){
 			e.printStackTrace();
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		} finally {
 			try {
 				ibatis.endTransaction();
@@ -133,6 +145,8 @@ public class EmployeeManager {
 			ibatis.commitTransaction();
 		} catch (SQLException e){
 			e.printStackTrace();
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		} finally {
 			try {
 				ibatis.endTransaction();
@@ -173,6 +187,8 @@ public class EmployeeManager {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		} finally {
 			try {
 				ibatis.endTransaction();
@@ -190,6 +206,8 @@ public class EmployeeManager {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		} 
 		return list;
 	}
@@ -202,6 +220,8 @@ public class EmployeeManager {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		} 
 		return list;
 	}
@@ -214,6 +234,8 @@ public class EmployeeManager {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		} 
 		return list;
 	}
@@ -226,6 +248,8 @@ public class EmployeeManager {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		} 
 		return list;
 	}
@@ -238,6 +262,8 @@ public class EmployeeManager {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		} 
 		return list;
 	}
@@ -250,6 +276,8 @@ public class EmployeeManager {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		} 
 		return list;
 	}
@@ -262,6 +290,8 @@ public class EmployeeManager {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		} 
 		return list;
 	}
@@ -275,6 +305,8 @@ public class EmployeeManager {
 			list = ibatis.queryForList("list.getRole", data);
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		} 
 		return list;
 	}
@@ -286,6 +318,8 @@ public class EmployeeManager {
 			list = ibatis.queryForList("employee.getEmployeeName", "");
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		} 
 		
 		return list;
@@ -299,6 +333,8 @@ public class EmployeeManager {
 			imageByte = empBean.getEmployeeImage();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		} 
 		return imageByte;
 	}
@@ -309,6 +345,8 @@ public class EmployeeManager {
 			imageSize = (String) ibatis.queryForObject("employee.getEmployeeImageSize", empId);
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		} 
 		return imageSize;
 	}
@@ -321,6 +359,8 @@ public class EmployeeManager {
 			imageByte = empBean.getEmployeeDocuments();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		} 
 		return imageByte;
 	}
@@ -335,6 +375,8 @@ public class EmployeeManager {
 			list = ibatis.queryForList("employee.getEmployeeDocumentsId", data);
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		} 
 		
 		return list;
@@ -349,6 +391,8 @@ public class EmployeeManager {
 			ibatis.commitTransaction();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		} finally{
 			try {
 				ibatis.endTransaction();
@@ -365,7 +409,9 @@ public class EmployeeManager {
 			result = (String) ibatis.queryForObject("employee.getDepartmentName", deptId);
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} 
 		return result;
 	}
 	
@@ -397,6 +443,8 @@ public class EmployeeManager {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		} finally {
 			try {
 				ibatis.endTransaction();
@@ -434,6 +482,8 @@ public class EmployeeManager {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		} finally {
 			try {
 				ibatis.endTransaction();
@@ -442,7 +492,7 @@ public class EmployeeManager {
 			}
 		}
 	}
-
+	
 	public int getSameUsername(String userName, String empId){
 		int result = 0;
 		Map map = new HashMap();
@@ -453,7 +503,9 @@ public class EmployeeManager {
 			result = (Integer) ibatis.queryForObject("employee.getSameUsername", map);
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} 
 		return result;
 	}
 
@@ -464,6 +516,8 @@ public class EmployeeManager {
 			list = ibatis.queryForList("employee.getPrivilege", userName);
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		} 
 		
 		return list;
@@ -481,7 +535,9 @@ public class EmployeeManager {
 				return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} 
 		return false;	
 	}
 	
@@ -496,6 +552,8 @@ public class EmployeeManager {
 			ibatis.commitTransaction();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		} finally {
 			try {
 				ibatis.endTransaction();
@@ -512,7 +570,9 @@ public class EmployeeManager {
 			result = (String) ibatis.queryForObject("employee.getUrl", menu);
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} 
 		return result;
 	}
 	
@@ -523,7 +583,9 @@ public class EmployeeManager {
 			result = (String) ibatis.queryForObject("employee.getSessionRole", roleId);
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} 
 		return result;
 	}
 	
@@ -533,7 +595,9 @@ public class EmployeeManager {
 			url = (String) ibatis.queryForObject("users.getPortalUrl", "");
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} 
 		return url;
 	}
 }

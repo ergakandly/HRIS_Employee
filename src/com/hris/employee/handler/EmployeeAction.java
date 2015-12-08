@@ -65,12 +65,12 @@ public class EmployeeAction extends Action{
 		}
 		eForm.setParameter(parameter);
 		
-		//String role = "HR";  
-		String role = manager.getSessionRole(session.getAttribute("roleId").toString()); 
+		String role = "HR";  
+//		String role = manager.getSessionRole(session.getAttribute("roleId").toString()); 
 		System.out.println("Role "+role);
 		
-		//String nameSession = "donny.setiawan";
-		String nameSession = session.getAttribute("username").toString();
+		String nameSession = "isidorus.sn";
+//		String nameSession = session.getAttribute("username").toString();
 		System.out.println("Name "+nameSession);
 		
 		eForm.setUrlDashboard("http://192.168.10.29:8080"+manager.getUrl("Portal")+"?zx="+eForm.getParameter());
@@ -96,6 +96,9 @@ public class EmployeeAction extends Action{
 				request.setAttribute("personalIdList", personalIdList);
 				
 				request.setAttribute("imageSize", manager.getEmployeeImageSize(eForm.getId()));
+				System.out.println(eForm.getEmpBean().getDocType().length);
+				System.out.println(eForm.getEmpBean().getEmployeeDoc().length);
+				System.out.println(eForm.getEmpBean().getDocDesc().length);
 				return mapping.findForward("view");
 			}
 			else if("add".equalsIgnoreCase(eForm.getTask())){
@@ -120,8 +123,10 @@ public class EmployeeAction extends Action{
 					eForm.getEmpBean().setPhotoFileData(eForm.getEmpBean().getEmployeePhoto().getFileData());
 				}
 
-				eForm.getEmpBean().setUserId(session.getAttribute("userId").toString());
-				manager.insertEmployeeData(eForm.getEmpBean(), session.getAttribute("userId").toString(), 0);
+//				eForm.getEmpBean().setUserId(session.getAttribute("userId").toString());
+				eForm.getEmpBean().setUserId("1");
+//				manager.insertEmployeeData(eForm.getEmpBean(), session.getAttribute("userId").toString(), 0);
+				manager.insertEmployeeData(eForm.getEmpBean(), "1", 0);
 				eForm.setListEmp(manager.getEmployee(0));
 				
 				eForm.setNotification("Employee has been succesfully added.");
@@ -130,8 +135,10 @@ public class EmployeeAction extends Action{
 			}
 			else if("insertDocuments".equalsIgnoreCase(eForm.getTask())){
 				System.out.println("employeeId "+eForm.getId());
-				eForm.getEmpBean().setUserId(session.getAttribute("userId").toString());
+//				eForm.getEmpBean().setUserId(session.getAttribute("userId").toString());
+				eForm.getEmpBean().setUserId("1");
 				manager.insertMoreDocs(eForm.getEmpBean(), eForm.getId(), 1);
+//				manager.insertMoreDocs1(eForm.getEmpBean(), eForm.getId(), 1);
 				
 				//mapping ke view
 				List<DocBean> diplomaIdList = manager.getEmployeeDocumentsId(eForm.getId(), "1");
@@ -178,7 +185,8 @@ public class EmployeeAction extends Action{
 				} 
 				
 				eForm.getEmpBean().setEmpId(eForm.getId());
-				eForm.getEmpBean().setUserId(session.getAttribute("userId").toString());
+//				eForm.getEmpBean().setUserId(session.getAttribute("userId").toString());
+				eForm.getEmpBean().setUserId("1");
 				manager.updateEmployee(eForm.getEmpBean());
 
 				manager.updateDocument(eForm.getEmpBean());
@@ -214,7 +222,8 @@ public class EmployeeAction extends Action{
 			else if("updateMutation".equalsIgnoreCase(eForm.getTask())){
 				System.out.println(eForm.getEmpBean().getDepartmentId());
 				System.out.println(eForm.getEmpBean().getRoleId());
-				manager.mutate(eForm.getId(), eForm.getEmpBean().getDepartmentId(), eForm.getEmpBean().getRoleId(),session.getAttribute("userId").toString());
+//				manager.mutate(eForm.getId(), eForm.getEmpBean().getDepartmentId(), eForm.getEmpBean().getRoleId(),session.getAttribute("userId").toString());
+				manager.mutate(eForm.getId(), eForm.getEmpBean().getDepartmentId(), eForm.getEmpBean().getRoleId(),"1");
 				
 				//reset
 				eForm.setId(""); eForm.setEmpBean(new EmployeeBean()); 
@@ -272,8 +281,8 @@ public class EmployeeAction extends Action{
 			return mapping.findForward("success");
 		}
 		else {
-//			String idSession = "2";
-			String idSession = session.getAttribute("userId").toString();
+			String idSession = "3";
+//			String idSession = session.getAttribute("userId").toString();
 			
 			System.out.println("ID fix: "+idSession); 
 			

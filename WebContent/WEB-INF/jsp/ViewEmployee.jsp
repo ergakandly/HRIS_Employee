@@ -106,7 +106,7 @@ img {
 	}
 </script>
 <body>
-	<html:form action="/index">
+	<html:form action="/index" enctype="multipart/form-data">
 		<html:hidden name="empForm" property="task" value="insertDocuments" />
 		<html:hidden name="empForm" property="id"/>
 		<html:hidden name="empForm" property="sidebar" />
@@ -590,38 +590,32 @@ img {
 															<i class="fa fa-close"></i> Remove
 														</button>
 														<br /> <br />
-														<table class="table table-condensed table-bordered"
-															id="tbl">
-															<thead>
-																<tr>
-																	<th width="20%">Type</th>
-																	<th class="width30">Image</th>
-																	<th class="width100">Description</th>
-																</tr>
-															</thead>
-															<tbody>
-																<tr>
-																	<td><select name="empBean.docType[0]"
-																		class="form-control input-sm">
-																			<option value="" disabled selected>Select
-																				One...</option>
-																			<option value="1">Diploma</option>
-																			<option value="2">Certificate</option>
-																			<option value="3">Personal Documents</option>
-																	</select></td>
-																	<td>
-																		<div class="input-group input-group-sm">
-																			<input name="empBean.employeeDoc[0]" type="file"
-																				size="60" placeholder="Choose Picture"
-																				styleClass="form-control">
-																		</div>
-																	</td>
-																	<td><input type="text" name="empBean.docDesc[0]"
-																		placeholder="enter description here" size="80"
-																		class="form-control"></td>
-																</tr>
-															</tbody>
-														</table>
+														<table id="tbl" class="table table-bordered">
+														<tr>
+															<th width="20%">Type</th>
+															<th class="width30">Image</th>
+															<th class="width100">Description</th>
+														</tr>
+														<tr>
+															<td><select name="empBean.docType[0]"
+																class="form-control input-sm">
+																	<option value="" disabled selected>Select One...</option>
+																	<option value="1">Diploma</option>
+																	<option value="2">Certificate</option>
+																	<option value="3">Personal Documents</option>
+															</select></td>
+															<td>
+																<div class="input-group input-group-sm">
+																	
+																	<input name="empBean.employeeDoc[0]" type="file" size="60"
+																		placeholder="Choose Picture" styleClass="form-control">
+																</div>
+															</td>
+															<td><input type="text" name="empBean.docDesc[0]"
+																placeholder="enter description here" size="100"
+																class="form-control"></td>
+														</tr>
+													</table>
 													</div>
 													<div class="modal-footer">
 														<button type="submit" class="btn btn-primary">
@@ -639,29 +633,21 @@ img {
 										<!-- END MODAL ADD NEW -->
 										<table class="table table-nonfluid table-borderless">
 											<!-- <table class="table table-nonfluid table-striped table-bordered table-hover"> -->
-											<%
-												List<DocBean> diplomaIdList = (List<DocBean>) request.getAttribute("diplomaIdList");
-											%>
+											<% List<DocBean> diplomaIdList = (List<DocBean>) request.getAttribute("diplomaIdList"); %>
 											<tr>
 												<td><h5 class="fontHitam">
 														<small><b>Diploma</b></small>
 													</h5>
 													<hr style="margin: -5px 0 5px 0"></td>
 											</tr>
-											<%
-												if (diplomaIdList.isEmpty()) {
-											%>
+											<% if (diplomaIdList.isEmpty()) { %>
 											<tr>
 												<td>Document not available.</td>
 											</tr>
-											<%
-												} else {
-											%>
+											<% } else { %>
 											<tr>
 												<ul>
-													<%
-														for (int i = 0; i < diplomaIdList.size(); i++) {
-													%>
+													<% for (int i = 0; i < diplomaIdList.size(); i++) { %>
 													<td>
 														<li class="docs"><a
 															href="DocRenderer?docId=<%=diplomaIdList.get(i).getDocumentId()%>"
@@ -671,37 +657,25 @@ img {
 																alt="gallery thumbnail" class="img-thumbnail"
 																height="192" width="192" /></a></li> <br /><%=diplomaIdList.get(i).getDescription()%>
 													</td>
-													<%
-														}
-													%>
+													<% } %>
 												</ul>
 											</tr>
-											<%
-												}
-											%>
+											<% } %>
 
-											<%
-												List<DocBean> certificateIdList = (List<DocBean>) request.getAttribute("certificateIdList");
-											%>
+											<% List<DocBean> certificateIdList = (List<DocBean>) request.getAttribute("certificateIdList"); %>
 											<tr>
 												<td><h5 class="fontHitam">
 														<small><b>Certificate</b></small>
 													</h5>
 													<hr style="margin: -5px 0 5px 0"></td>
 											</tr>
-											<%
-												if (certificateIdList.isEmpty()) {
-											%>
+											<% if (certificateIdList.isEmpty()) { %>
 											<tr>
 												<td>Document not available.</td>
 											</tr>
-											<%
-												} else {
-											%>
+											<% } else { %>
 											<tr>
-												<%
-													for (int i = 0; i < certificateIdList.size(); i++) {
-												%>
+												<% for (int i = 0; i < certificateIdList.size(); i++) { %>
 												<td>
 													<li class="docs"><a
 														href="DocRenderer?docId=<%=certificateIdList.get(i).getDocumentId()%>"
@@ -711,36 +685,24 @@ img {
 															alt="gallery thumbnail" class="img-thumbnail"
 															height="192" width="192" /></a></li> <br /><%=certificateIdList.get(i).getDescription()%>
 												</td>
-												<%
-													}
-												%>
+												<% } %>
 											</tr>
-											<%
-												}
-											%>
+											<% } %>
 
-											<%
-												List<DocBean> personalIdList = (List<DocBean>) request.getAttribute("personalIdList");
-											%>
+											<% List<DocBean> personalIdList = (List<DocBean>) request.getAttribute("personalIdList"); %>
 											<tr>
 												<td><h5 class="fontHitam">
 														<small><b>Personal Documents</b></small>
 													</h5>
 													<hr style="margin: -5px 0 5px 0"></td>
 											</tr>
-											<%
-												if (personalIdList.isEmpty()) {
-											%>
+											<% if (personalIdList.isEmpty()) { %>
 											<tr>
 												<td>Document not available.</td>
 											</tr>
-											<%
-												} else {
-											%>
+											<% } else { %>
 											<tr>
-												<%
-													for (int i = 0; i < personalIdList.size(); i++) {
-												%>
+												<% for (int i = 0; i < personalIdList.size(); i++) { %>
 												<td>
 													<li class="docs"><a
 														href="DocRenderer?docId=<%=personalIdList.get(i).getDocumentId()%>"
@@ -750,13 +712,9 @@ img {
 															alt="gallery thumbnail" class="img-thumbnail"
 															height="192" width="192" /></a></li> <br /><%=personalIdList.get(i).getDescription()%>
 												</td>
-												<%
-													}
-												%>
+												<% } %>
 											</tr>
-											<%
-												}
-											%>
+											<% } %>
 										</table>
 									</div>
 								</div>
