@@ -161,7 +161,7 @@ PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
 		UPDATE
 			ms_employee
 		SET
-			<isEqual property="flag" compareValue="0">
+			<isEqual property="flag" compareValue="1">
 				status = '2',
 			</isEqual>
 			quit_date = to_date(#quitDate#,'dd/mm/yyyy'),
@@ -340,7 +340,8 @@ PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
 			document_id,
 			employee_id, 
 			document,
-			document_type, 
+			document_type,
+			document_content_type, 
 			description,
 			created_by,
 			create_date
@@ -354,6 +355,7 @@ PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
 			</isEqual>
 			#employeeDoc#, 
 			#docType#, 
+			#docContentType#,
 			#docDesc#, 
 			#userId#, 
 			SYSDATE
