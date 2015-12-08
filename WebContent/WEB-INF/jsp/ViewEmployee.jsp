@@ -366,15 +366,6 @@ img {
 														property="empBean.status" /></td>
 											</tr>
 											<tr>
-												<td class="kanan fontBold">Status Description :</td>
-												<td><logic:notEqual name="empForm"
-														property="empBean.description" value="">
-														<bean:write name="empForm" property="empBean.description" />
-													</logic:notEqual> <logic:equal name="empForm" property="empBean.description"
-														value="">-
-												</logic:equal></td>
-											</tr>
-											<tr>
 												<td class="kanan fontBold">Manager :</td>
 												<td><logic:notEqual name="empForm"
 														property="empBean.managerName" value="">
@@ -655,7 +646,14 @@ img {
 															title="<%=diplomaIdList.get(i).getDescription()%>"><img
 																src="DocRenderer?docId=<%=diplomaIdList.get(i).getDocumentId()%>"
 																alt="gallery thumbnail" class="img-thumbnail"
-																height="192" width="192" /></a></li> <br /><%=diplomaIdList.get(i).getDescription()%>
+																height="192" width="192" /></a></li> <br />
+																  
+																<%if( null== diplomaIdList.get(i).getDescription() || ("").equals(diplomaIdList.get(i).getDescription()) ){ %>
+																	--
+																<%}else{ %>
+																	<%=diplomaIdList.get(i).getDescription()%>	
+																<%} %>
+																
 													</td>
 													<% } %>
 												</ul>
@@ -683,7 +681,12 @@ img {
 														title="<%=certificateIdList.get(i).getDescription()%>"><img
 															src="DocRenderer?docId=<%=certificateIdList.get(i).getDocumentId()%>"
 															alt="gallery thumbnail" class="img-thumbnail"
-															height="192" width="192" /></a></li> <br /><%=certificateIdList.get(i).getDescription()%>
+															height="192" width="192" /></a></li> <br />
+															<%if( null== certificateIdList.get(i).getDescription() || ("").equals(certificateIdList.get(i).getDescription()) ){ %>
+																--
+															<%}else{ %>
+																<%=certificateIdList.get(i).getDescription()%>	
+															<%} %>
 												</td>
 												<% } %>
 											</tr>
@@ -710,7 +713,13 @@ img {
 														title="<%=personalIdList.get(i).getDescription()%>"><img
 															src="DocRenderer?docId=<%=personalIdList.get(i).getDocumentId()%>"
 															alt="gallery thumbnail" class="img-thumbnail"
-															height="192" width="192" /></a></li> <br /><%=personalIdList.get(i).getDescription()%>
+															height="192" width="192" /></a></li> <br />
+															
+															<%if( null== personalIdList.get(i).getDescription() || ("").equals(personalIdList.get(i).getDescription()) ){ %>
+																--
+															<%}else{ %>
+																<%=personalIdList.get(i).getDescription()%>	
+															<%} %>
 												</td>
 												<% } %>
 											</tr>
