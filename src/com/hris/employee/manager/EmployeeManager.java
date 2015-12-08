@@ -415,7 +415,7 @@ public class EmployeeManager {
 		return result;
 	}
 	
-	public void insertEmployeeData(EmployeeBean bean, String userId, int flag) {
+	public void insertEmployeeData(EmployeeBean bean, String userId, int flag) throws SQLException, FileNotFoundException, IOException {
 		
 		try{
 			ibatis.startTransaction();
@@ -437,14 +437,6 @@ public class EmployeeManager {
 			}
 			
 			ibatis.commitTransaction();
-		} catch (SQLException e){
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception ex) {
-			ex.printStackTrace();
 		} finally {
 			try {
 				ibatis.endTransaction();

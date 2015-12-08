@@ -1,6 +1,9 @@
 package com.hris.employee.handler;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -126,10 +129,22 @@ public class EmployeeAction extends Action{
 //				eForm.getEmpBean().setUserId(session.getAttribute("userId").toString());
 				eForm.getEmpBean().setUserId("1");
 //				manager.insertEmployeeData(eForm.getEmpBean(), session.getAttribute("userId").toString(), 0);
-				manager.insertEmployeeData(eForm.getEmpBean(), "1", 0);
+				try {
+					eForm.setNotification("Employee has been succesfully added.");
+					manager.insertEmployeeData(eForm.getEmpBean(), "1", 0);
+					System.out.println("ga masuk catch");
+				} catch (SQLException e) {
+					eForm.setNotification("Add employee failed. SQL error occurred. Please contact the administrator.");
+				} catch (FileNotFoundException e) {
+					eForm.setNotification("Add employee failed. File not found error occurred. Please check if the file has been uploaded successfully.");
+				} catch (IOException e) {
+					eForm.setNotification("Add employee failed. Input/Output error occurred. Please check if the file has been uploaded successfully.");
+				} catch (Exception ex) {
+					eForm.setNotification("Add employee failed. Unknown error occured.");
+				}
+				
 				eForm.setListEmp(manager.getEmployee(0));
 				
-				eForm.setNotification("Employee has been succesfully added.");
 				eForm.setEmpBean(new EmployeeBean()); //reset field
 				return mapping.findForward("success");
 			}

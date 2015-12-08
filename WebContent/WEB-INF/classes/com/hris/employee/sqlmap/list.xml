@@ -82,6 +82,8 @@ PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
 							lower(role_name) NOT LIKE lower('%HR%')
 							AND
 							lower(role_name) NOT LIKE lower('%Finance%')
+							AND 
+							role_id != 1
 						</isNotEqual>
 					</isNotEqual>
 				</isNotEmpty>
