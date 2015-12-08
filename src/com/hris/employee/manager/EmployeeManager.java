@@ -21,7 +21,7 @@ public class EmployeeManager {
 	
 	public List getEmployee(int flag){
 		List list = null;
-		Map map = new HashMap();
+		Map<String, Integer> map = new HashMap<String, Integer>();
 		map.put("flag", flag);
 		
 		try {
@@ -37,7 +37,7 @@ public class EmployeeManager {
 	}
 	
 	public void deactivate(String empId, String statusDesc, String quitDate) {
-		Map map = new HashMap();
+		Map<String, String> map = new HashMap<String, String>();
 		map.put("description", statusDesc);
 		map.put("empId", empId);
 		map.put("quitDate", quitDate);
@@ -60,12 +60,12 @@ public class EmployeeManager {
 	}
 	
 	public void mutate(String empId, String deptId, String roleId, String userId) {
-		Map mapDept = new HashMap();
+		Map<String, String> mapDept = new HashMap<String, String>();
 		mapDept.put("deptId", deptId);
 		mapDept.put("empId", empId);
 		mapDept.put("userId", userId);
 		
-		Map mapRole = new HashMap();
+		Map<String, String> mapRole = new HashMap<String, String>();
 		mapRole.put("roleId", roleId);
 		mapRole.put("empId", empId);
 		mapRole.put("userId", userId);
@@ -134,7 +134,7 @@ public class EmployeeManager {
 	}
 	
 	public void updateUsername(String username, String empId, String userId) {
-		Map data = new HashMap();
+		Map<String, String> data = new HashMap<String, String>();
 		data.put("username", username);
 		data.put("empId", empId);
 		data.put("userId", userId);
@@ -169,7 +169,7 @@ public class EmployeeManager {
 						System.out.println("doc: "+bean.getEmployeeDoc()[i].getFileData());
 						System.out.println("desc: "+bean.getDocDesc()[i]);
 						
-						Map parameter = new HashMap();
+						Map<String, Object> parameter = new HashMap<String, Object>();
 						parameter.put("docId", bean.getDocId()[i]);
 						parameter.put("doc", bean.getEmployeeDoc()[i].getFileData());
 						parameter.put("desc", bean.getDocDesc()[i]);
@@ -298,7 +298,7 @@ public class EmployeeManager {
 	
 	public List getRole(String deptName){
 		List list = null;
-		Map data = new HashMap();
+		Map<String, String> data = new HashMap<String, String>();
 		data.put("deptName", deptName);
 		
 		try {
@@ -367,7 +367,7 @@ public class EmployeeManager {
 
 	public List getEmployeeDocumentsId(String empId, String docType){
 		List list = null;
-		Map data = new HashMap();
+		Map<String, String> data = new HashMap<String, String>();
 		data.put("empId", empId);
 		data.put("docType", docType);
 		
@@ -424,7 +424,7 @@ public class EmployeeManager {
 			for(int i=0;i<10;i++){
 				if(bean.getEmployeeDoc()[i]!=null){
 					if(bean.getEmployeeDoc()[i].getContentType().contains("image")){
-						Map parameter = new HashMap();
+						Map<String, Object> parameter = new HashMap<String, Object>();
 						parameter.put("docType", bean.getDocType()[i]);
 						parameter.put("employeeDoc", bean.getEmployeeDoc()[i].getFileData());
 						parameter.put("docDesc", bean.getDocDesc()[i]);
@@ -454,7 +454,7 @@ public class EmployeeManager {
 			for(int i=0;i<10;i++){
 				if(bean.getEmployeeDoc()[i]!=null){
 					if(bean.getEmployeeDoc()[i].getContentType().contains("image")){
-						Map parameter = new HashMap();
+						Map<String, Object> parameter = new HashMap<String, Object>();
 						parameter.put("docType", bean.getDocType()[i]);
 						parameter.put("employeeDoc", bean.getEmployeeDoc()[i].getFileData());
 						parameter.put("docDesc", bean.getDocDesc()[i]);
@@ -487,7 +487,7 @@ public class EmployeeManager {
 	
 	public int getSameUsername(String userName, String empId){
 		int result = 0;
-		Map map = new HashMap();
+		Map<String, String> map = new HashMap<String, String>();
 		map.put("userName", userName);
 		map.put("empId", empId);
 		
@@ -516,7 +516,7 @@ public class EmployeeManager {
 	}
 	
 	public boolean isAuthorized(String username, String password) {
-		Map user = new HashMap();
+		Map<String, String> user = new HashMap<String, String>();
 		user.put("username", username);
 		user.put("password", password);
 		
