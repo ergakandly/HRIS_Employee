@@ -35,11 +35,18 @@ public class EmployeeForm extends ActionForm {
 	private String searchByEmp;
 	private String sidebar = "1";
 	private Integer provinceId;
+	private Integer bankId;
 	private String department;
 	
 	private String notification;
 	private String urlPortal;
 	
+	public Integer getBankId() {
+		return bankId;
+	}
+	public void setBankId(Integer bankId) {
+		this.bankId = bankId;
+	}
 	public String getNotification() {
 		return notification;
 	}

@@ -26,8 +26,21 @@ public class DocRenderer extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		EmployeeManager manager = new EmployeeManager();
 		String docId = request.getParameter("docId");
+		int contentType = manager.getDocumentContentType(docId);
 		
-		response.setContentType("image/jpg");
+		if (contentType == 1) {
+			response.setHeader("Content-Disposition", "filename=\"image\"");
+			response.setContentType("image/jpg");
+		}
+		else if (contentType == 2) {
+			response.setHeader("Content-Disposition", "attachment; filename=\"word-document\"");
+			response.setContentType("application/msword");
+		}
+		else if (contentType == 3) {
+			response.setHeader("Content-Disposition", "filename=\"pdf-document\"");
+			response.setContentType("application/pdf");
+		}
+		
 		response.setContentLength(manager.getDocument(docId).length);
 		response.getOutputStream().write(manager.getDocument(docId));
 		response.getOutputStream().flush();

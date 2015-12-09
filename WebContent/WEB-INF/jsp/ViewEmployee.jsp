@@ -640,13 +640,36 @@ img {
 												<ul>
 													<% for (int i = 0; i < diplomaIdList.size(); i++) { %>
 													<td>
-														<li class="docs"><a
-															href="DocRenderer?docId=<%=diplomaIdList.get(i).getDocumentId()%>"
-															class="preview" target="_blank"
-															title="<%=diplomaIdList.get(i).getDescription()%>"><img
-																src="DocRenderer?docId=<%=diplomaIdList.get(i).getDocumentId()%>"
-																alt="gallery thumbnail" class="img-thumbnail"
-																height="192" width="192" /></a></li> <br />
+														<li class="docs">
+															<% if ("1".equals(diplomaIdList.get(i).getDocumentContentType())) { %>
+																<a href="DocRenderer?docId=<%=diplomaIdList.get(i).getDocumentId()%>"
+																	class="preview" target="_blank"
+																	title="<%=diplomaIdList.get(i).getDescription()%>">
+																<img
+																	src="DocRenderer?docId=<%=diplomaIdList.get(i).getDocumentId()%>"
+																	alt="gallery thumbnail" class="img-thumbnail"
+																	height="192" width="192" />
+																</a>
+															<% } else if ("2".equals(diplomaIdList.get(i).getDocumentContentType())) { %>
+																<a href="DocRenderer?docId=<%=diplomaIdList.get(i).getDocumentId()%>"
+																	target="_blank"
+																	title="<%=diplomaIdList.get(i).getDescription()%>">
+																<img
+																	src="asset/img/doc-thumbnail.png"
+																	alt="gallery thumbnail" class="img-thumbnail"
+																	height="192" width="192" />
+																</a>
+															<% } else if ("3".equals(diplomaIdList.get(i).getDocumentContentType())) { %>
+																<a href="DocRenderer?docId=<%=diplomaIdList.get(i).getDocumentId()%>"
+																	target="_blank"
+																	title="<%=diplomaIdList.get(i).getDescription()%>">
+																<img
+																	src="asset/img/pdf-thumbnail.png"
+																	alt="gallery thumbnail" class="img-thumbnail"
+																	height="192" width="192" />
+																</a>
+															<% } %>
+															</li> <br />
 																  
 																<%if( null== diplomaIdList.get(i).getDescription() || ("").equals(diplomaIdList.get(i).getDescription()) ){ %>
 																	--
@@ -675,13 +698,36 @@ img {
 											<tr>
 												<% for (int i = 0; i < certificateIdList.size(); i++) { %>
 												<td>
-													<li class="docs"><a
-														href="DocRenderer?docId=<%=certificateIdList.get(i).getDocumentId()%>"
-														class="preview" target="_blank"
-														title="<%=certificateIdList.get(i).getDescription()%>"><img
-															src="DocRenderer?docId=<%=certificateIdList.get(i).getDocumentId()%>"
-															alt="gallery thumbnail" class="img-thumbnail"
-															height="192" width="192" /></a></li> <br />
+													<li class="docs">
+														<% if ("1".equals(certificateIdList.get(i).getDocumentContentType())) { %>
+															<a  href="DocRenderer?docId=<%=certificateIdList.get(i).getDocumentId()%>"
+																class="preview" target="_blank"
+																title="<%=certificateIdList.get(i).getDescription()%>">
+															<img
+																src="DocRenderer?docId=<%=certificateIdList.get(i).getDocumentId()%>"
+																alt="gallery thumbnail" class="img-thumbnail"
+																height="192" width="192" />
+															</a>
+														<% } else if ("2".equals(certificateIdList.get(i).getDocumentContentType())) { %>
+															<a  href="DocRenderer?docId=<%=certificateIdList.get(i).getDocumentId()%>"
+																target="_blank"
+																title="<%=certificateIdList.get(i).getDescription()%>">
+															<img
+																src="asset/img/doc-thumbnail.png"
+																alt="gallery thumbnail" class="img-thumbnail"
+																height="192" width="192" />
+															</a>
+														<% } else if ("3".equals(certificateIdList.get(i).getDocumentContentType())) { %>
+															<a  href="DocRenderer?docId=<%=certificateIdList.get(i).getDocumentId()%>"
+																target="_blank"
+																title="<%=certificateIdList.get(i).getDescription()%>">
+															<img
+																src="asset/img/pdf-thumbnail.png"
+																alt="gallery thumbnail" class="img-thumbnail"
+																height="192" width="192" />
+															</a>
+														<% } %>
+														</li> <br />
 															<%if( null== certificateIdList.get(i).getDescription() || ("").equals(certificateIdList.get(i).getDescription()) ){ %>
 																--
 															<%}else{ %>
@@ -707,13 +753,37 @@ img {
 											<tr>
 												<% for (int i = 0; i < personalIdList.size(); i++) { %>
 												<td>
-													<li class="docs"><a
-														href="DocRenderer?docId=<%=personalIdList.get(i).getDocumentId()%>"
-														class="preview" target="_blank"
-														title="<%=personalIdList.get(i).getDescription()%>"><img
-															src="DocRenderer?docId=<%=personalIdList.get(i).getDocumentId()%>"
-															alt="gallery thumbnail" class="img-thumbnail"
-															height="192" width="192" /></a></li> <br />
+													<li class="docs">
+														<% if ("1".equals(personalIdList.get(i).getDocumentContentType())) { %>
+															<a
+																href="DocRenderer?docId=<%=personalIdList.get(i).getDocumentId()%>"
+																class="preview" target="_blank"
+																title="<%=personalIdList.get(i).getDescription()%>">
+															<img
+																src="DocRenderer?docId=<%=personalIdList.get(i).getDocumentId()%>"
+																alt="gallery thumbnail" class="img-thumbnail"
+																height="192" width="192" />
+															</a>
+														<% } else if ("2".equals(personalIdList.get(i).getDocumentContentType())) { %>
+															<a  href="DocRenderer?docId=<%=personalIdList.get(i).getDocumentId()%>"
+																target="_blank"
+																title="<%=personalIdList.get(i).getDescription()%>">
+															<img
+																src="asset/img/doc-thumbnail.png"
+																alt="gallery thumbnail" class="img-thumbnail"
+																height="192" width="192" />
+															</a>
+														<% } else if ("3".equals(personalIdList.get(i).getDocumentContentType())) { %>
+															<a  href="DocRenderer?docId=<%=personalIdList.get(i).getDocumentId()%>"
+																target="_blank"
+																title="<%=personalIdList.get(i).getDescription()%>">
+															<img
+																src="asset/img/pdf-thumbnail.png"
+																alt="gallery thumbnail" class="img-thumbnail"
+																height="192" width="192" />
+															</a>
+														<% } %>
+														</li> <br />
 															
 															<%if( null== personalIdList.get(i).getDescription() || ("").equals(personalIdList.get(i).getDescription()) ){ %>
 																--
@@ -747,9 +817,8 @@ img {
 											class="img-thumbnail" height="192" width="192" /> <%
  	} else {
  %> <img src="asset/img/default.png" height="192" width="192"
-											class="img-thumbnail" /> <%
- 	}
- %>
+											class="img-thumbnail" />
+	<% } %>
 										</td>
 
 									</tr>

@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.hris.employee.ibatis.IbatisHelper;
+import com.hris.employee.model.DocBean;
 import com.hris.employee.model.EmployeeBean;
 import com.hris.employee.model.RoleBean;
 import com.ibatis.sqlmap.client.SqlMapClient;
@@ -374,7 +375,21 @@ public class EmployeeManager {
 		} 
 		return imageByte;
 	}
-
+	
+	public int getDocumentContentType(String docId){
+		int type = 0;
+		
+		try {
+			type = (Integer) ibatis.queryForObject("employee.getDocumentContentType", docId);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} 
+		
+		return type;
+	}
+	
 	public List getEmployeeDocumentsId(String empId, String docType){
 		List list = null;
 		Map<String, String> data = new HashMap<String, String>();
@@ -431,16 +446,16 @@ public class EmployeeManager {
 			ibatis.startTransaction();
 			ibatis.insert("employee.insertEmployee", bean);
 			
-			for(int i=0;i<10;i++){				
-				if(bean.getEmployeeDoc()[i].getContentType().contains("image")) {
-					docContentType = "1"; 
-				} else if(bean.getEmployeeDoc()[i].getContentType().contains("officedocument")) {
-					docContentType = "2"; 
-				} else if(bean.getEmployeeDoc()[i].getContentType().contains("pdf")) {
-					docContentType = "3"; 
-				} 
-				
+			for(int i=0;i<10;i++){		
 				if(bean.getEmployeeDoc()[i]!=null){
+					if(bean.getEmployeeDoc()[i].getContentType().contains("image")) {
+						docContentType = "1"; 
+					} else if(bean.getEmployeeDoc()[i].getContentType().contains("officedocument")) {
+						docContentType = "2"; 
+					} else if(bean.getEmployeeDoc()[i].getContentType().contains("pdf")) {
+						docContentType = "3"; 
+					}
+					
 					if(bean.getEmployeeDoc()[i].getContentType().contains("image") || bean.getEmployeeDoc()[i].getContentType().contains("pdf") || 
 					   bean.getEmployeeDoc()[i].getContentType().contains("officedocument")){
 						Map<String, Object> parameter = new HashMap<String, Object>();
@@ -472,15 +487,15 @@ public class EmployeeManager {
 			ibatis.startTransaction();
 			
 			for(int i=0;i<10;i++){
-				if(bean.getEmployeeDoc()[i].getContentType().contains("image")) {
-					docContentType = "1"; 
-				} else if(bean.getEmployeeDoc()[i].getContentType().contains("officedocument")) {
-					docContentType = "2"; 
-				} else if(bean.getEmployeeDoc()[i].getContentType().contains("pdf")) {
-					docContentType = "3"; 
-				} 
-				
 				if(bean.getEmployeeDoc()[i]!=null){
+					if(bean.getEmployeeDoc()[i].getContentType().contains("image")) {
+						docContentType = "1"; 
+					} else if(bean.getEmployeeDoc()[i].getContentType().contains("officedocument")) {
+						docContentType = "2"; 
+					} else if(bean.getEmployeeDoc()[i].getContentType().contains("pdf")) {
+						docContentType = "3"; 
+					} 
+					
 					if(bean.getEmployeeDoc()[i].getContentType().contains("image") || bean.getEmployeeDoc()[i].getContentType().contains("pdf") || 
 							   bean.getEmployeeDoc()[i].getContentType().contains("officedocument")){
 						Map<String, Object> parameter = new HashMap<String, Object>();
@@ -613,5 +628,17 @@ public class EmployeeManager {
 			ex.printStackTrace();
 		} 
 		return url;
+	}
+	
+	public int getAccountLength(int bankId) {
+		int length = 0;
+		try {
+			length = (Integer) ibatis.queryForObject("employee.getAccountLength", bankId);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} 
+		return length;
 	}
 }

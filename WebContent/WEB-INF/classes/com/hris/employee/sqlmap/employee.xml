@@ -312,10 +312,20 @@ PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
 			document_id = #docId#
 	</select>
 	
+	<select id="getDocumentContentType" parameterClass="java.lang.String" resultClass="int">
+		SELECT 
+			document_content_type
+		FROM 
+			ms_document 
+		WHERE 
+			document_id = #docId#
+	</select>
+	
 	<select id="getEmployeeDocumentsId" parameterClass="java.util.Map" resultClass="com.hris.employee.model.DocBean">
 		SELECT
-			document_id AS documentId,
-			description AS description
+			document_id 			AS documentId,
+			description 			AS description,
+			document_content_type	AS documentContentType
 		FROM
 			ms_document
 		WHERE 
@@ -532,5 +542,14 @@ PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
 			ms_role
 		WHERE 
 			role_id = #roleId# 
+	</select>
+	
+	<select id="getAccountLength" parameterClass="java.lang.Integer" resultClass="int">
+		SELECT 
+			max_account_length
+		FROM 
+			ms_bank
+		WHERE 
+			bank_id = #bankId# 
 	</select>
 </sqlMap>

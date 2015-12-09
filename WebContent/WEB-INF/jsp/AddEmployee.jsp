@@ -715,9 +715,9 @@
 												</tr>
 												<tr>
 													<td class="kanan">Bank :</td>
-													<td><html:select name="empForm"
-															property="empBean.bankId"
-															styleClass="form-control form-control-md">
+													<td><select id="selectBank"
+															name="empBean.bankId"
+															styleClass="form-control form-control-md" onchange="javascript:getAccountLength();">
 															<option value="" disabled selected>Choose one...</option>
 															<logic:iterate id="list" name="empForm"
 																property="listBank">
@@ -726,7 +726,7 @@
 																	<bean:write name="list" property="bank" />
 																</option>
 															</logic:iterate>
-														</html:select></td>
+														</select></td>
 												</tr>
 												<tr>
 													<td class="kanan">Number :</td>
@@ -1085,6 +1085,21 @@
 </script>
 <script type="text/javascript">
 	var today = new Date();
+	
+	var accountLength = 15;
+	function getAccountLength() {
+		$
+				.getJSON(
+						"/HRIS_Employee/index.do",
+						{
+							bankId : $('#selectBank').val(),
+							task : "loadAccountLength"
+						},
+						function(data) {
+							accountLength = data;
+						});
+	}
+	
 	$('#validate-form')
 			.bootstrapValidator(
 					{
@@ -1387,8 +1402,10 @@
 										message : 'The value is not a valid number'
 									},
 									stringLength: {
-				                        max: 15,
-				                        message: 'Account number must be less than 15 characters'
+				                        //min: accountLength,
+										max: accountLength,
+				                        //message: 'Account number must be ' + accountLength + ' characters'
+										message: 'Account name must be less than ' + accountLength + ' characters'
 									},
 								}
 							},

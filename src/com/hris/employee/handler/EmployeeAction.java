@@ -70,11 +70,9 @@ public class EmployeeAction extends Action{
 		eForm.setUrlPortal(manager.getPortalUrl());
 		request.setAttribute("zx", "?zx="+EmployeeUtil.createParameter(session));
 		
-//		String role = "HR";  
 		String role = manager.getSessionRole(session.getAttribute("roleId").toString()); 
 		System.out.println("Role "+role);
 		
-//		String nameSession = "isidorus.sn";
 		String nameSession = session.getAttribute("username").toString();
 		System.out.println("Name "+nameSession);
 		
@@ -125,11 +123,10 @@ public class EmployeeAction extends Action{
 					eForm.getEmpBean().setPhotoFileData(eForm.getEmpBean().getEmployeePhoto().getFileData());
 				}
 
-//				eForm.getEmpBean().setUserId("1");
 				eForm.getEmpBean().setUserId(session.getAttribute("userId").toString());
+				eForm.getEmpBean().setIdCard(eForm.getEmpBean().getIdCard().replace(".", ""));
 				
 				try {
-//					manager.insertEmployeeData(eForm.getEmpBean(), "1", 0);
 					manager.insertEmployeeData(eForm.getEmpBean(), session.getAttribute("userId").toString(), 0);
 					eForm.setNotification("Employee data succesfully added.");
 				} catch (SQLException e) {
@@ -153,7 +150,6 @@ public class EmployeeAction extends Action{
 			}
 			else if("insertDocuments".equalsIgnoreCase(eForm.getTask())){
 				System.out.println("employeeId "+eForm.getId());
-//				eForm.getEmpBean().setUserId("1");
 				eForm.getEmpBean().setUserId(session.getAttribute("userId").toString());
 				
 				try{
@@ -216,13 +212,12 @@ public class EmployeeAction extends Action{
 					eForm.getEmpBean().setPhotoFileData(eForm.getEmpBean().getEmployeePhoto().getFileData());
 				} 
 				
-//				eForm.getEmpBean().setUserId(session.getAttribute("userId").toString());
 				eForm.getEmpBean().setEmpId(eForm.getId());
 				
-//				eForm.getEmpBean().setUserId("1");
 				eForm.getEmpBean().setUserId(session.getAttribute("userId").toString());
+				eForm.getEmpBean().setIdCard(eForm.getEmpBean().getIdCard().replace(".", ""));
+				
 				manager.updateEmployee(eForm.getEmpBean());
-
 				manager.updateDocument(eForm.getEmpBean());
 				
 				//mapping ke view
@@ -266,7 +261,6 @@ public class EmployeeAction extends Action{
 				System.out.println(eForm.getEmpBean().getDepartmentId());
 				System.out.println(eForm.getEmpBean().getRoleId());
 				try{
-//					manager.mutate(eForm.getId(), eForm.getEmpBean().getDepartmentId(), eForm.getEmpBean().getRoleId(),"1");
 					manager.mutate(eForm.getId(), eForm.getEmpBean().getDepartmentId(), eForm.getEmpBean().getRoleId(),session.getAttribute("userId").toString());
 					eForm.setNotification("Employee successfully mutated.");
 				} catch (SQLException e){
@@ -316,6 +310,23 @@ public class EmployeeAction extends Action{
 			    
 			    return null;
 			}
+			else if("loadAccountLength".equalsIgnoreCase(eForm.getTask())) {
+				Gson gson = new Gson(); 
+				
+			    int accountLength = manager.getAccountLength(eForm.getBankId());
+			    
+			    String jsonData= gson.toJson(accountLength); 
+			    
+			    response.setContentType("application/json"); 
+			    response.setHeader("cache-control", "no-cache"); 
+			    System.out.println(jsonData); 
+			    
+			    PrintWriter out = response.getWriter(); 
+			    out.write(jsonData); 
+			    out.flush();
+			    
+			    return null;
+			}
 			else if("logout".equalsIgnoreCase(eForm.getTask())) {
 				session = request.getSession(false);
 				manager.updateStatusLogin(session.getAttribute("username").toString(), 0);
@@ -333,7 +344,6 @@ public class EmployeeAction extends Action{
 			return mapping.findForward("success");
 		}
 		else {
-//			String idSession = "3";
 			String idSession = session.getAttribute("userId").toString();
 			
 			System.out.println("ID fix: "+idSession); 

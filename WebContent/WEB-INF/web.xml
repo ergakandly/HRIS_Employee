@@ -52,4 +52,14 @@
     <filter-name>EmployeeFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
+  <servlet>
+    <description></description>
+    <display-name>DownloadDocument</display-name>
+    <servlet-name>DownloadDocument</servlet-name>
+    <servlet-class>com.hris.employee.servlet.DownloadDocument</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DownloadDocument</servlet-name>
+    <url-pattern>/DownloadDocument</url-pattern>
+  </servlet-mapping>
 </web-app>
